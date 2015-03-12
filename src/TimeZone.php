@@ -26,7 +26,7 @@ class TimeZone extends \DateTimeZone
      *
      * @see http://php.net/manual/en/timezones.php List of supported timezone names
      * @param string $timezone One of the supported timezone names
-     * @throws \DateTime\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     * @throws InvalidTimeZoneException Thrown if supplied timezone is not recognised as
      *   a valid timezone
      */
     public function __construct($timezone)
@@ -43,7 +43,7 @@ class TimeZone extends \DateTimeZone
      * Convert any \DateTimeZone object to a \DateTime\TimeZone object
      *
      * @param \DateTimeZone $tz Object to convert
-     * @return \DateTime\TimeZone Converted object
+     * @return TimeZone Converted object
      */
     public static function convert(\DateTimeZone $tz)
     {
@@ -118,7 +118,7 @@ class TimeZone extends \DateTimeZone
      *
      * @param  string $timezone The new default timezone
      * @return string
-     * @throws \DateTime\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     * @throws InvalidTimeZoneException Thrown if supplied timezone is not recognised as
      *   a valid timezone
      */
     public static function defaultZone($timezone = null)
