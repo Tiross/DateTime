@@ -27,6 +27,6 @@ if (!is_dir($dir)) {
     mkdir($dir, 0777, true);
 }
 
-$coverage = new atoum\report\fields\runner\coverage\html('json', $dir);
+$coverage = new atoum\report\fields\runner\coverage\html('datetime', $dir);
 $coverage->setRootUrl('http://localhost');
 $report->addField($coverage);
