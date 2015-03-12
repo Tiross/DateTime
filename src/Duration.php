@@ -257,9 +257,9 @@ class Duration
      */
     public function hasPositive()
     {
-        $func = function ($v) {
-            if ($v > 0) {
-                return $v;
+        $func = function ($val) {
+            if ($val > 0) {
+                return $val;
             }
         };
 
@@ -280,9 +280,9 @@ class Duration
      */
     public function hasNegative()
     {
-        $func = function ($v) {
-            if ($v < 0) {
-                return $v;
+        $func = function ($val) {
+            if ($val < 0) {
+                return $val;
             }
         };
 
@@ -422,6 +422,7 @@ class Duration
                     break;
 
                 case 'seconds':
+                default: // fix scrutinizer issue
                     $base  = 'seconds';
                     $coeff = 1;
                     break;
