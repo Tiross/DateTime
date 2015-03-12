@@ -42,16 +42,16 @@ class TimeZone extends \DateTimeZone
     /**
      * Convert any \DateTimeZone object to a \DateTime\TimeZone object
      *
-     * @param \DateTimeZone $tz Object to convert
+     * @param \DateTimeZone $zone Object to convert
      * @return TimeZone Converted object
      */
-    public static function convert(\DateTimeZone $tz)
+    public static function convert(\DateTimeZone $zone)
     {
-        if ($tz instanceof static) {
-            return $tz;
+        if ($zone instanceof static) {
+            return $zone;
         }
 
-        return new static($tz->getName());
+        return new static($zone->getName());
     }
 
     /**
@@ -62,7 +62,7 @@ class TimeZone extends \DateTimeZone
      */
     public function __toString()
     {
-        return parent::getName();
+        return $this->getName();
     }
 
     /**
@@ -116,7 +116,7 @@ class TimeZone extends \DateTimeZone
      * If `$timezone` is provided, it will be used to change the default timezone.
      * The method will return the old default value.
      *
-     * @param  string $timezone The new default timezone
+     * @param  string|null $timezone The new default timezone
      * @return string
      * @throws Exception\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
      *   a valid timezone
