@@ -106,4 +106,34 @@ class Duration extends \atoum
                     ->isCloneOf($this->testedInstance->CLONE)
         ;
     }
+
+    public function test__call()
+    {
+        $this
+            ->if($obj = $this->newTestedInstance)
+            ->and($method = uniqid())
+            ->then
+                ->exception(function () use ($obj, $method) {
+                    $obj->$method();
+                })
+                    ->isInstanceOf('\Tiross\DateTime\Exception\LogicException')
+                    ->hasCode(399)
+                    ->hasMessage(sprintf('Call to undefined method %s::%s()', get_class($obj), $method))
+        ;
+    }
+
+    public function test__get()
+    {
+        $this
+            ->if($obj = $this->newTestedInstance)
+            ->and($property = uniqid())
+            ->then
+                ->exception(function () use ($obj, $property) {
+                    $obj->$property;
+                })
+                    ->isInstanceOf('\Tiross\DateTime\Exception\LogicException')
+                    ->hasCode(398)
+                    ->hasMessage(sprintf('Undefined property: %s::$%s', get_class($obj), $property))
+        ;
+    }
 }

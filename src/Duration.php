@@ -221,6 +221,9 @@ class Duration
             case 'clone':
                 return $this->cloneObject();
         }
+
+        $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
+        throw new Exception\LogicException($message, 399);
     }
 
     public function __get($property)
@@ -229,5 +232,8 @@ class Duration
             case 'clone':
                 return $this->$property();
         }
+
+        $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
+        throw new Exception\LogicException($message, 398);
     }
 }
