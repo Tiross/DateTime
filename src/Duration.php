@@ -147,10 +147,10 @@ class Duration
         extract($args);
 
         // Affecting
-        $this->months  = (int) $multiplier * ($years * 12 + $months);
-        $this->days    = (int) $multiplier * ($weeks * 7 + $days);
-        $this->minutes = (int) $multiplier * ($hours * 60 + $minutes);
-        $this->seconds = (int) $multiplier * $seconds;
+        $this->months  = intval($multiplier * ($years * 12 + $months));
+        $this->days    = intval($multiplier * ($weeks * 7 + $days));
+        $this->minutes = intval($multiplier * ($hours * 60 + $minutes));
+        $this->seconds = intval($multiplier * $seconds);
 
         // Adding reference
         if ($reference instanceof DateTime) {
