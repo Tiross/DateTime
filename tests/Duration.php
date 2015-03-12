@@ -65,4 +65,23 @@ class Duration extends \atoum
                     ->hasMessage(sprintf('Argument seems invalid "%s(%s)"', get_class($errorArgs), (string) $errorArgs))
         ;
     }
+
+    public function testFromDateInterval()
+    {
+        $this
+            ->given($calendar = array('Y', 'M', 'W', 'D'))
+            ->and($clock = array('H', 'M', 'S'))
+            ->when(function () use (&$calendar, &$clock) {
+                shuffle($calendar);
+                shuffle($clock);
+            })
+
+            ->if($string = 'P' . rand(0, 30) . current($calendar) . 'T' . rand(0, 30) . current($clock))
+
+            ->then
+                ->object(testedClass::fromDateInterval(new \DateInterval($string)))
+                    ->isInstanceOf('\Tiross\DateTime\Duration')
+                    ->isEqualTo($this->newTestedInstance($string))
+        ;
+    }
 }

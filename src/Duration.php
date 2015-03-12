@@ -180,4 +180,27 @@ class Duration
     {
         return $this->reference;
     }
+
+
+    /**
+     * Create a Duration from a DateInterval
+     *
+     * @param \DateInterval $obj
+     * @return self
+     */
+    public static function fromDateInterval(\DateInterval $obj)
+    {
+        $multiplier = $obj->format('%r') === '-' ? -1 : 1;
+
+        $args = array(
+            'years'   => $multiplier * $obj->format('%y'),
+            'months'  => $multiplier * $obj->format('%m'),
+            'days'    => $multiplier * $obj->format('%d'),
+            'hours'   => $multiplier * $obj->format('%h'),
+            'minutes' => $multiplier * $obj->format('%i'),
+            'seconds' => $multiplier * $obj->format('%s'),
+        );
+
+        return new Duration($args);
+    }
 }
