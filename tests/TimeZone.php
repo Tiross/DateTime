@@ -1,13 +1,15 @@
 <?php
 
-namespace DateTime\tests\unit;
+namespace Tiross\DateTime\tests\unit;
+
+use Tiross\DateTime\TimeZone as testedClass;
 
 class TimeZone extends \atoum
 {
     public function testClass()
     {
         $this
-            ->class('\DateTime\TimeZone')
+            ->class('\Tiross\DateTime\TimeZone')
                 ->isSubclassOf('\DateTimeZone')
         ;
     }
@@ -19,16 +21,15 @@ class TimeZone extends \atoum
     {
         $this
             ->object($this->newTestedInstance($tz))
-                ->isInstanceOf('\DateTime\TimeZone')
-                ->isInstanceOf('\DateTimeZone')
+                ->isInstanceOf('\Tiross\DateTime\TimeZone')
                 ->isNotCallable
 
             ->if($errorTZ = $tz . '/Error')
             ->then
                 ->exception(function () use ($errorTZ) {
-                    new \DateTime\TimeZone($errorTZ);
+                    new testedClass($errorTZ);
                 })
-                    ->isInstanceOf('\DateTime\InvalidTimeZoneException')
+                    ->isInstanceOf('\Tiross\DateTime\InvalidTimeZoneException')
                     ->hasCode(201)
                     ->hasMessage(sprintf('The timezone "%s" is not recognised as a valid timezone', $errorTZ))
         ;
@@ -40,9 +41,13 @@ class TimeZone extends \atoum
     public function testConvert($tz)
     {
         $this
-            ->object(\DateTime\TimeZone::convert(new \DateTimeZone($tz)))
-                ->isEqualTo(\DateTime\TimeZone::convert(new \DateTime\TimeZone($tz)))
-                ->isEqualTo(new \DateTime\TimeZone($tz))
+            ->if($this->newTestedInstance($tz))
+            ->then
+                ->object(testedClass::convert(new \DateTimeZone($tz)))
+                    ->isEqualTo($this->testedInstance)
+
+                ->object(testedClass::convert($this->testedInstance))
+                    ->isTestedInstance
         ;
     }
 
@@ -75,41 +80,36 @@ class TimeZone extends \atoum
     public function test__callException()
     {
         $this
-            ->if($this->newTestedInstance('UTC'))
-            ->and($method = 'invalidMethod')
+            ->if($obj = $this->newTestedInstance('UTC'))
+            ->and($method = uniqid())
             ->then
                 ->exception(function () use ($method) {
                     $this->testedInstance->$method();
                 })
                     ->hasCode(204)
-                    ->hasMessage(sprintf('Call to undefined method DateTime\TimeZone::%s()', $method))
+                    ->hasMessage(sprintf('Call to undefined method %s::%s()', get_class($obj), $method))
         ;
     }
 
     /**
-     * @dataProvider methodProvider
+     * @dataProvider getProvider
      */
     public function test__get($method)
     {
         $this
-            ->if($this->newTestedInstance('UTC'))
+            ->if($obj = $this->newTestedInstance('UTC'))
             ->then
                 ->variable($this->testedInstance->$method)
                     ->isIdenticalTo($this->testedInstance->$method())
-        ;
-    }
 
-    public function test__getException()
-    {
-        $this
-            ->if($this->newTestedInstance('UTC'))
-            ->and($property = 'invalidProperty')
+            ->if($property = $method . uniqid())
             ->then
                 ->exception(function () use ($property) {
                     $this->testedInstance->$property;
                 })
+                    ->isInstanceOf('\Tiross\DateTime\LogicException')
                     ->hasCode(205)
-                    ->hasMessage(sprintf('Undefined property: DateTime\TimeZone::$%s', $property))
+                    ->hasMessage(sprintf('Undefined property: %s::$%s', get_class($obj), $property))
         ;
     }
 
@@ -134,7 +134,7 @@ class TimeZone extends \atoum
         );
     }
 
-    public function methodProvider()
+    public function getProvider()
     {
         return array(
             'GeTlOcAtIoN',

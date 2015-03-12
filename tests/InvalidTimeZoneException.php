@@ -1,15 +1,13 @@
 <?php
 
-namespace DateTime\test\unit;
+namespace Tiross\DateTime\test\unit;
 
-use atoum;
-
-class InvalidTimeZoneException extends atoum
+class InvalidTimeZoneException extends \atoum
 {
     public function testClass()
     {
         $this
-            ->class('\DateTime\InvalidTimeZoneException')
+            ->class('\Tiross\DateTime\InvalidTimeZoneException')
                 ->isSubclassOf('\InvalidArgumentException')
         ;
     }

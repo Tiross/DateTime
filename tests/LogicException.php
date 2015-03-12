@@ -1,15 +1,13 @@
 <?php
 
-namespace DateTime\tests\unit;
+namespace Tiross\DateTime\tests\unit;
 
-use atoum;
-
-class LogicException extends atoum
+class LogicException extends \atoum
 {
     public function testClass()
     {
         $this
-            ->class('\DateTime\LogicException')
+            ->class('\Tiross\DateTime\LogicException')
                 ->isSubclassOf('\LogicException')
         ;
     }

@@ -5,7 +5,7 @@
  * @package DateTime
  * @author Tiross
  */
-namespace DateTime;
+namespace Tiross\DateTime;
 
 /**
  * Representation of time zone

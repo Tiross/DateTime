@@ -1,5 +1,5 @@
 <?php
 
-namespace DateTime;
+namespace Tiross\DateTime;
 
 class LogicException extends \LogicException {}

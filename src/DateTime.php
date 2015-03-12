@@ -1,12 +1,15 @@
 <?php
 
-namespace DateTime;
+namespace Tiross\DateTime;
 
 class DateTime extends \DateTime
 {
+    /** @type bool */
+    protected $isFinite = true;
+
     public function __construct($args = null, $tz = null)
     {
-        $date = null;
+        $date = $args;
 
         if (is_array($args)) {
             if (count($args)) {
@@ -16,7 +19,7 @@ class DateTime extends \DateTime
                 $hour     = 0;
                 $minute   = 0;
                 $second   = 0;
-                $timezone = 'UTC';
+                $timezone = null;
 
                 extract($args, EXTR_OVERWRITE);
 
@@ -24,13 +27,15 @@ class DateTime extends \DateTime
                 $tmpTime = array($hour, $minute, $second);
 
                 $date = implode('-', $tmpDate) . 'T' . implode(':', $tmpTime);
+
+                $tz = $timezone;
             }
-        } else {
-            $date = $args;
         }
 
         if (is_string($tz)) {
             $tz = new TimeZone($tz);
+        } elseif ($tz instanceof \DateTimeZone) {
+            $tz = TimeZone::convert($tz);
         }
 
         parent::__construct($date, $tz);
