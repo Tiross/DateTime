@@ -76,7 +76,7 @@ class TimeZone extends \DateTimeZone
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
-        throw new LogicException($message, 204);
+        throw new LogicException($message, 299);
     }
 
     /**
@@ -94,6 +94,48 @@ class TimeZone extends \DateTimeZone
         }
 
         $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
-        throw new LogicException($message, 205);
+        throw new LogicException($message, 298);
+    }
+
+    /**
+     * Gets or sets the default timezone used by all date/time functions in a script
+     *
+     * If `$timezone` is not provided, no change will be made, the function will act like a getter.
+     *
+     * If `$timezone` is provided, it will be used to change the default timezone.
+     * The method will return the old default value.
+     *
+     * @param  string $timezone The new default timezone
+     * @return string
+     */
+    public static function defaultZone($timezone = null)
+    {
+        $default = date_default_timezone_get();
+
+        if (!is_null($timezone)) {
+            $result = date_default_timezone_set($timezone);
+
+            if (false === $result) {
+                $message = sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone);
+                throw new InvalidTimeZoneException($message, 202);
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Gets the version of the timezonedb
+     *
+     * If you get `0.system` you have the version that PHP shipped with.
+     * For a newer version, you must upgrade via the PECL extension `sudo pecl install timezonedb`.
+     *
+     * @see http://php.net/manual/en/function.timezone-version-get.php Documentation on PHP.net
+     * @see http://pecl.php.net/package/timezonedb timezonedb on PECL
+     * @return string
+     */
+    public static function version()
+    {
+        return timezone_version_get();
     }
 }

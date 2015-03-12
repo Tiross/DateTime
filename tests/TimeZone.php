@@ -77,7 +77,7 @@ class TimeZone extends \atoum
         ;
     }
 
-    public function test__callException()
+    public function test__call()
     {
         $this
             ->if($obj = $this->newTestedInstance('UTC'))
@@ -86,7 +86,7 @@ class TimeZone extends \atoum
                 ->exception(function () use ($method) {
                     $this->testedInstance->$method();
                 })
-                    ->hasCode(204)
+                    ->hasCode(299)
                     ->hasMessage(sprintf('Call to undefined method %s::%s()', get_class($obj), $method))
         ;
     }
@@ -108,11 +108,58 @@ class TimeZone extends \atoum
                     $this->testedInstance->$property;
                 })
                     ->isInstanceOf('\Tiross\DateTime\LogicException')
-                    ->hasCode(205)
+                    ->hasCode(298)
                     ->hasMessage(sprintf('Undefined property: %s::$%s', get_class($obj), $property))
         ;
     }
 
+    public function testVersion()
+    {
+        $this
+            ->if($this->function->timezone_version_get = $version = uniqid())
+            ->then
+                ->string(testedClass::version())
+                    ->isIdenticalTo($version)
+                ->function('timezone_version_get')
+                    ->wasCalledWithoutAnyArgument()
+                        ->once
+        ;
+    }
+
+    public function testDefault()
+    {
+        $this
+            ->given($timezone = uniqid())
+
+            ->if($this->function->date_default_timezone_get = $default = uniqid())
+            ->and($this->function->date_default_timezone_set = true)
+
+            ->assert('Get actual default')
+                ->string(testedClass::defaultZone())
+                    ->isIdenticalTo($default)
+                ->function('date_default_timezone_get')
+                    ->wasCalledWithoutAnyArgument()->once
+                ->function('date_default_timezone_set')
+                    ->wasCalled()->never
+
+            ->assert('Set new default')
+                ->string(testedClass::defaultZone($timezone))
+                    ->isIdenticalTo($default)
+                ->function('date_default_timezone_get')
+                    ->wasCalledWithoutAnyArgument()->once
+                ->function('date_default_timezone_set')
+                    ->wasCalledWithIdenticalArguments($timezone)->once
+
+            ->if($this->function->date_default_timezone_set = false)
+            ->assert('Bad timezone')
+                ->exception(function () use ($timezone) {
+                    testedClass::defaultZone($timezone);
+                })
+                    ->isInstanceOf('\Tiross\DateTime\InvalidTimeZoneException')
+                    ->hasCode(202)
+                    ->hasMessage(sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone))
+        ;
+    }
 
     public function constructProvider()
     {
