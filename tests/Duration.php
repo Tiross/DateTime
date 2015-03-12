@@ -374,4 +374,235 @@ class Duration extends \atoum
                         ->isIdenticalTo(end($array2))
         ;
     }
+
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testYears($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($years += intval($months / 12))
+            ->and($values = $this->testedInstance->inUnits('years'))
+
+            ->then
+                ->integer($this->testedInstance->years())
+                    ->isIdenticalTo((int) $years)
+                    ->isIdenticalTo($values['years'])
+
+                ->integer($this->testedInstance->YEARS())
+                    ->isIdenticalTo((int) $years)
+                    ->isIdenticalTo($values['years'])
+
+                ->integer($this->testedInstance->years)
+                    ->isIdenticalTo((int) $years)
+                    ->isIdenticalTo($values['years'])
+
+                ->integer($this->testedInstance->YEARS)
+                    ->isIdenticalTo((int) $years)
+                    ->isIdenticalTo($values['years'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testMonths($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($months += $years * 12)
+            ->and($values = $this->testedInstance->inUnits('months'))
+
+            ->then
+                ->integer($this->testedInstance->months())
+                    ->isIdenticalTo((int) $months)
+                    ->isIdenticalTo($values['months'])
+
+                ->integer($this->testedInstance->MONTHS())
+                    ->isIdenticalTo((int) $months)
+                    ->isIdenticalTo($values['months'])
+
+                ->integer($this->testedInstance->months)
+                    ->isIdenticalTo((int) $months)
+                    ->isIdenticalTo($values['months'])
+
+                ->integer($this->testedInstance->MONTHS)
+                    ->isIdenticalTo((int) $months)
+                    ->isIdenticalTo($values['months'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testWeeks($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($weeks += intval($days / 7))
+            ->and($values = $this->testedInstance->inUnits('weeks'))
+
+            ->then
+                ->integer($this->testedInstance->weeks())
+                    ->isIdenticalTo((int) $weeks)
+                    ->isIdenticalTo($values['weeks'])
+
+                ->integer($this->testedInstance->WEEKS())
+                    ->isIdenticalTo((int) $weeks)
+                    ->isIdenticalTo($values['weeks'])
+
+                ->integer($this->testedInstance->weeks)
+                    ->isIdenticalTo((int) $weeks)
+                    ->isIdenticalTo($values['weeks'])
+
+                ->integer($this->testedInstance->WEEKS)
+                    ->isIdenticalTo((int) $weeks)
+                    ->isIdenticalTo($values['weeks'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testDays($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($days += $weeks * 7)
+            ->and($values = $this->testedInstance->inUnits('days'))
+
+            ->then
+                ->integer($this->testedInstance->days())
+                    ->isIdenticalTo((int) $days)
+                    ->isIdenticalTo($values['days'])
+
+                ->integer($this->testedInstance->DAYS())
+                    ->isIdenticalTo((int) $days)
+                    ->isIdenticalTo($values['days'])
+
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo((int) $days)
+                    ->isIdenticalTo($values['days'])
+
+                ->integer($this->testedInstance->DAYS)
+                    ->isIdenticalTo((int) $days)
+                    ->isIdenticalTo($values['days'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testHours($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($hours += intval($minutes / 60))
+            ->and($values = $this->testedInstance->inUnits('hours'))
+
+            ->then
+                ->integer($this->testedInstance->hours())
+                    ->isIdenticalTo((int) $hours)
+                    ->isIdenticalTo($values['hours'])
+
+                ->integer($this->testedInstance->HOURS())
+                    ->isIdenticalTo((int) $hours)
+                    ->isIdenticalTo($values['hours'])
+
+                ->integer($this->testedInstance->hours)
+                    ->isIdenticalTo((int) $hours)
+                    ->isIdenticalTo($values['hours'])
+
+                ->integer($this->testedInstance->HOURS)
+                    ->isIdenticalTo((int) $hours)
+                    ->isIdenticalTo($values['hours'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testMinutes($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($minutes += $hours * 60)
+            ->and($values = $this->testedInstance->inUnits('minutes'))
+
+            ->then
+                ->integer($this->testedInstance->minutes())
+                    ->isIdenticalTo((int) $minutes)
+                    ->isIdenticalTo($values['minutes'])
+
+                ->integer($this->testedInstance->MINUTES())
+                    ->isIdenticalTo((int) $minutes)
+                    ->isIdenticalTo($values['minutes'])
+
+                ->integer($this->testedInstance->minutes)
+                    ->isIdenticalTo((int) $minutes)
+                    ->isIdenticalTo($values['minutes'])
+
+                ->integer($this->testedInstance->MINUTES)
+                    ->isIdenticalTo((int) $minutes)
+                    ->isIdenticalTo($values['minutes'])
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testSeconds($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($this->newTestedInstance($args))
+
+            ->if($values = $this->testedInstance->inUnits('seconds'))
+
+            ->then
+                ->integer($this->testedInstance->seconds())
+                    ->isIdenticalTo((int) $seconds)
+                    ->isIdenticalTo($values['seconds'])
+
+                ->integer($this->testedInstance->SECONDS())
+                    ->isIdenticalTo((int) $seconds)
+                    ->isIdenticalTo($values['seconds'])
+
+                ->integer($this->testedInstance->seconds)
+                    ->isIdenticalTo((int) $seconds)
+                    ->isIdenticalTo($values['seconds'])
+
+                ->integer($this->testedInstance->SECONDS)
+                    ->isIdenticalTo((int) $seconds)
+                    ->isIdenticalTo($values['seconds'])
+        ;
+    }
+
+
+    public function unitsProvider()
+    {
+        // $years, $months, $weeks, $days, $hours, $minutes, $seconds
+        return array(
+            array(5, 2, 0, -10, 1, 3, -5),
+            array(0, 0, 0, 0, 0, 0, 3600),
+            array(1, 0, 0, 0, 0, 0, 0),
+            array(0, 0, 1, 0, 0, 0, 0),
+            array(-1, -1, -1, -1, -1, -1, -1),
+            array(rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100)),
+        );
+    }
 }

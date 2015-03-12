@@ -223,6 +223,15 @@ class Duration
         switch (strtolower($method)) {
             case 'clone':
                 return $this->cloneObject();
+
+            case 'years':
+            case 'months':
+            case 'weeks':
+            case 'days':
+            case 'hours':
+            case 'minutes':
+            case 'seconds':
+                return array_shift($this->inUnits($method));
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
@@ -242,6 +251,14 @@ class Duration
             case 'iszero':
             case 'ispositive':
             case 'isnegative':
+
+            case 'years':
+            case 'months':
+            case 'weeks':
+            case 'days':
+            case 'hours':
+            case 'minutes':
+            case 'seconds':
                 return $this->$property();
         }
 
