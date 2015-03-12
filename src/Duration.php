@@ -17,16 +17,16 @@ class Duration
     /** @var bool Is a finite duration ? */
     protected $isFinite = true;
 
-    /** @var integer Months */
+    /** @var float Months */
     protected $months = 0;
 
-    /** @var integer Days */
+    /** @var float Days */
     protected $days = 0;
 
-    /** @var integer Minutes */
+    /** @var float Minutes */
     protected $minutes = 0;
 
-    /** @var integer Seconds */
+    /** @var float Seconds */
     protected $seconds = 0;
 
     /** @var DateTime Reference to a DateTime */
@@ -147,10 +147,10 @@ class Duration
         extract($args);
 
         // Affecting
-        $this->months  = intval($multiplier * ($years * 12 + $months));
-        $this->days    = intval($multiplier * ($weeks * 7 + $days));
-        $this->minutes = intval($multiplier * ($hours * 60 + $minutes));
-        $this->seconds = intval($multiplier * $seconds);
+        $this->months  = $multiplier * ($years * 12 + $months);
+        $this->days    = $multiplier * ($weeks * 7 + $days);
+        $this->minutes = $multiplier * ($hours * 60 + $minutes);
+        $this->seconds = $multiplier * $seconds;
 
         // Adding reference
         if ($reference instanceof DateTime) {
