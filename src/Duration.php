@@ -205,7 +205,7 @@ class Duration
     }
 
     /**
-     * Clone
+     * Chain cloning
      *
      * @return self
      * @internal
@@ -215,6 +215,9 @@ class Duration
         return clone $this;
     }
 
+    /**
+     * @internal
+     */
     public function __call($method, $arguments)
     {
         switch (strtolower($method)) {
@@ -226,6 +229,9 @@ class Duration
         throw new Exception\LogicException($message, 399);
     }
 
+    /**
+     * @internal
+     */
     public function __get($property)
     {
         switch (strtolower($property)) {
