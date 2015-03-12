@@ -1,0 +1,22 @@
+sudo: false
+language: php
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+  - hhvm-nightly
+matrix:
+  allow_failures:
+    - 7.0
+    - php: hhvm
+    - php: hhvm-nightly
+before_script:
+  - composer install
+  - mkdir -p build/logs
+script: ./vendor/bin/atoum
+after_script:
+  - ./vendor/bin/coveralls -vvv
+  - ./vendor/bin/ocular code-coverage:upload --format=php-clover ./build/logs/clover.xml

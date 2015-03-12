@@ -1,0 +1,28 @@
+{
+  "name": "tiross/datetime",
+  "description": "Better dates",
+  "license": "MIT",
+  "keywords": ["date","time","timezone","datetime"],
+  "authors": [
+      {
+          "name": "Tiross"
+      }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Tiross/datetime"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Tiross\\DateTime\\": "src/"}
+  },
+  "require": {
+    "php": ">=5.3"
+  },
+  "require-dev": {
+    "atoum/atoum": "2.*",
+    "satooshi/php-coveralls": "dev-master",
+    "scrutinizer/ocular": "dev-master"
+  }
+}
