@@ -288,4 +288,90 @@ class Duration extends \atoum
         ;
     }
 
+    public function testInUnits()
+    {
+        $this
+            ->given($years = rand(0, 100))
+            ->and($months = rand(0, 100))
+            ->and($weeks = rand(0, 100))
+            ->and($days = rand(0, 100))
+            ->and($hours = rand(0, 100))
+            ->and($minutes = rand(0, 100))
+            ->and($seconds = rand(0, 100) * -1)
+
+            ->and($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+
+            ->if($this->newTestedInstance($args))
+
+            ->and($years += floor($months / 12))
+            ->and($months %= 12)
+            ->and($weeks += floor($days / 7))
+            ->and($days %= 7)
+            ->and($hours += floor($minutes / 60))
+            ->and($minutes %= 60)
+
+            ->and($years = (int) $years)
+            ->and($months = (int) $months)
+            ->and($weeks = (int) $weeks)
+            ->and($days = (int) $days)
+            ->and($hours = (int) $hours)
+            ->and($minutes = (int) $minutes)
+            ->and($seconds = (int) $seconds)
+
+            ->then
+                ->assert('normally, 1 year = 12 months, trying with ' . $years . ' years and ' . $months . ' months')
+                    ->array($this->testedInstance->inUnits('months'))
+                        ->hasSize(1)
+                        ->hasKey('months')
+                        ->strictlyContains($years * 12 + $months)
+
+                ->assert('trying with years (' . $years . ') and months (' . $months . ')')
+                    ->array($this->testedInstance->inUnits('years', 'months'))
+                        ->hasSize(2)
+                        ->hasKey('years')
+                        ->strictlyContains($years)
+                        ->hasKey('months')
+                        ->strictlyContains($months)
+
+                ->assert('1 hour = 60 minutes, trying with ' . $hours . ' hours and ' . $minutes . ' minutes')
+                    ->array($this->testedInstance->inUnits('minutes'))
+                        ->hasSize(1)
+                        ->hasKey('minutes')
+                        ->strictlyContains($hours * 60 + $minutes)
+                        ->isIdenticalTo($this->testedInstance->inUnits(array('minutes')))
+
+                ->assert('full calc, ' . $days . ' days / ' . $minutes . ' minutes / ' . $months . ' months / ' . $seconds . ' seconds')
+                    ->array($this->testedInstance->inUnits('days', 'minutes', 'months', 'seconds'))
+                        ->hasSize(4)
+                        ->hasKey('months')
+                        ->strictlyContains($years * 12 + $months)
+                        ->hasKey('days')
+                        ->strictlyContains($weeks * 7 + $days)
+                        ->hasKey('minutes')
+                        ->strictlyContains($hours * 60 + $minutes)
+                        ->hasKey('seconds')
+                        ->strictlyContains($seconds)
+
+                ->assert('giving arrays or strings does not matters')
+                    ->array($this->testedInstance->inUnits(array('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds')))
+                        ->isIdenticalTo($this->testedInstance->inUnits('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+
+                ->assert('ignore twice unit')
+                    ->array($this->testedInstance->inUnits('weeks', 'weeks'))
+                        ->hasSize(1)
+                        ->hasKey('weeks')
+                        ->strictlyContains($weeks)
+
+                ->assert('everything that is not an unit is ignored')
+                    ->array($this->testedInstance->inUnits(uniqid()))
+                        ->isEmpty
+
+                ->assert('order is kept')
+                    ->array($array1 = $this->testedInstance->inUnits($units = array('months', 'years')))
+                        ->isEqualTo($array2 = $this->testedInstance->inUnits($reversed = array_reverse($units)))
+                        ->isNotIdenticalTo($this->testedInstance->inUnits($reversed))
+                    ->integer(current($array1))
+                        ->isIdenticalTo(end($array2))
+        ;
+    }
 }

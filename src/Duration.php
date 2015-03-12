@@ -333,4 +333,113 @@ class Duration
     {
         return !$this->hasPositive() && $this->hasNegative();
     }
+
+    /**
+     * Returns the length of the duration in the units (any of those that can be passed to new) given as arguments
+     *
+     * All lengths are integral, but may be negative.
+     * Smaller units are computed from what remains after taking away the larger units given, so for example:
+     * ```php
+     * my $dur = new Duration(['years' => 1, 'months' => 15]);
+     *
+     * $dur->in_units('years');             // ['years' => 2]
+     * $dur->in_units('months');            // ['months' => 27]
+     * $dur->in_units('years', 'months');   // ['years' => 2, 'months' => 3]
+     * $dur->in_units(['years', 'months']); // ['years' => 2, 'months' => 3]
+     * $dur->in_units('weeks', 'days');     // ['weeks' => 0, 'days' => 0] !!
+     * ```
+     *
+     * The last example demonstrates that there will not be any conversion between units which don't have a fixed
+     * conversion rate.
+     * The only conversions possible are:
+     *  - years <=> months
+     *  - weeks <=> days
+     *  - hours <=> minutes
+     *
+     * Note that the numbers returned by this method may not match the values given to the constructor.
+     *
+     * @param string|string[] $params
+     * @return array
+     */
+    public function inUnits($params)
+    {
+        if (is_array($params)) {
+            $args = $params;
+        } else {
+            $args = func_get_args();
+        }
+        $args = array_unique($args);
+        $args = array_map('strtolower', $args);
+
+        $units = array('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds');
+
+        $asked   = array_intersect($units, $args);
+        $results = array();
+
+        $monthsMulti  = $this->months < 0 ? -1 : 1;
+        $months       = abs($this->months);
+
+        $daysMulti    = $this->days < 0 ? -1 : 1;
+        $days         = abs($this->days);
+
+        $minutesMulti = $this->minutes < 0 ? -1 : 1;
+        $minutes      = abs($this->minutes);
+
+        $secondsMulti = $this->seconds < 0 ? -1 : 1;
+        $seconds      = abs($this->seconds);
+
+        foreach ($asked as $unit) {
+
+            switch ($unit) {
+                case 'years':
+                    $base  = 'months';
+                    $coeff = 12;
+                    break;
+
+                case 'months':
+                    $base  = 'months';
+                    $coeff = 1;
+                    break;
+
+                case 'weeks':
+                    $base  = 'days';
+                    $coeff = 7;
+                    break;
+
+                case 'days':
+                    $base  = 'days';
+                    $coeff = 1;
+                    break;
+
+                case 'hours':
+                    $base  = 'minutes';
+                    $coeff = 60;
+                    break;
+
+                case 'minutes':
+                    $base  = 'minutes';
+                    $coeff = 1;
+                    break;
+
+                case 'seconds':
+                    $base  = 'seconds';
+                    $coeff = 1;
+                    break;
+            }
+
+            // Math
+            $value = floor($$base / $coeff);
+            $$base %= $coeff;
+
+            $value *= ${$base . 'Multi'};
+
+            $results[ $unit ] = (int) $value;
+        }
+
+        uksort($results, function ($key1, $key2) use ($args) {
+            return array_search($key1, $args) > array_search($key2, $args);
+        });
+
+        return $results;
+    }
 }
