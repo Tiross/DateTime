@@ -236,10 +236,101 @@ class Duration
     {
         switch (strtolower($property)) {
             case 'clone':
+
+            case 'haspositive':
+            case 'hasnegative':
+            case 'iszero':
+            case 'ispositive':
+            case 'isnegative':
                 return $this->$property();
         }
 
         $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
         throw new Exception\LogicException($message, 398);
+    }
+
+
+    /**
+     * Check if the duration has positive non zero value
+     *
+     * @return bool
+     */
+    public function hasPositive()
+    {
+        $func = function ($v) {
+            if ($v > 0) {
+                return $v;
+            }
+        };
+
+        $tmp = array(
+            $this->months,
+            $this->days,
+            $this->minutes,
+            $this->seconds,
+        );
+
+        return !!count(array_filter($tmp, $func));
+    }
+
+    /**
+     * Check if the duration has negative non zero value
+     *
+     * @return bool
+     */
+    public function hasNegative()
+    {
+        $func = function ($v) {
+            if ($v < 0) {
+                return $v;
+            }
+        };
+
+        $tmp = array(
+            $this->months,
+            $this->days,
+            $this->minutes,
+            $this->seconds,
+        );
+
+        return !!count(array_filter($tmp, $func));
+    }
+
+
+    /**
+     * Check if duration is null
+     *
+     * @return bool
+     */
+    public function isZero()
+    {
+        $tmp = array(
+            $this->months,
+            $this->days,
+            $this->minutes,
+            $this->seconds,
+        );
+
+        return !array_sum(array_map('abs', $tmp));
+    }
+
+    /**
+     * Check if duration has _only_ positives values
+     *
+     * @return bool
+     */
+    public function isPositive()
+    {
+        return $this->hasPositive() && !$this->hasNegative();
+    }
+
+    /**
+     * Check if duration has _only_ negatives values
+     *
+     * @return bool
+     */
+    public function isNegative()
+    {
+        return !$this->hasPositive() && $this->hasNegative();
     }
 }

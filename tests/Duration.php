@@ -136,4 +136,156 @@ class Duration extends \atoum
                     ->hasMessage(sprintf('Undefined property: %s::$%s', get_class($obj), $property))
         ;
     }
+
+    public function testHasPositive()
+    {
+        $this
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->hasPositive())->isTrue
+                ->boolean($this->testedInstance->HASPOSITIVE())->isTrue
+                ->boolean($this->testedInstance->hasPositive)->isTrue
+                ->boolean($this->testedInstance->HASPOSITIVE)->isTrue
+
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => 1)))
+            ->then
+                ->boolean($this->testedInstance->hasPositive())->isTrue
+                ->boolean($this->testedInstance->HASPOSITIVE())->isTrue
+                ->boolean($this->testedInstance->hasPositive)->isTrue
+                ->boolean($this->testedInstance->HASPOSITIVE)->isTrue
+
+            ->if($this->newTestedInstance(array('years' => -1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->hasPositive())->isFalse
+                ->boolean($this->testedInstance->HASPOSITIVE())->isFalse
+                ->boolean($this->testedInstance->hasPositive)->isFalse
+                ->boolean($this->testedInstance->HASPOSITIVE)->isFalse
+
+            ->if($this->newTestedInstance)
+            ->then
+                ->boolean($this->testedInstance->hasPositive())->isFalse
+                ->boolean($this->testedInstance->HASPOSITIVE())->isFalse
+                ->boolean($this->testedInstance->hasPositive)->isFalse
+                ->boolean($this->testedInstance->HASPOSITIVE)->isFalse
+        ;
+    }
+
+    public function testHasNegative()
+    {
+        $this
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->hasNegative())->isTrue
+                ->boolean($this->testedInstance->HASNEGATIVE())->isTrue
+                ->boolean($this->testedInstance->hasNegative)->isTrue
+                ->boolean($this->testedInstance->HASNEGATIVE)->isTrue
+
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => 1)))
+            ->then
+                ->boolean($this->testedInstance->hasNegative())->isFalse
+                ->boolean($this->testedInstance->HASNEGATIVE())->isFalse
+                ->boolean($this->testedInstance->hasNegative)->isFalse
+                ->boolean($this->testedInstance->HASNEGATIVE)->isFalse
+
+            ->if($this->newTestedInstance(array('years' => -1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->hasNegative())->isTrue
+                ->boolean($this->testedInstance->HASNEGATIVE())->isTrue
+                ->boolean($this->testedInstance->hasNegative)->isTrue
+                ->boolean($this->testedInstance->HASNEGATIVE)->isTrue
+
+            ->if($this->newTestedInstance)
+            ->then
+                ->boolean($this->testedInstance->hasNegative())->isFalse
+                ->boolean($this->testedInstance->HASNEGATIVE())->isFalse
+                ->boolean($this->testedInstance->hasNegative)->isFalse
+                ->boolean($this->testedInstance->HASNEGATIVE)->isFalse
+        ;
+    }
+
+    public function testIsZero()
+    {
+        $this
+            ->if($this->newTestedInstance)
+            ->then
+                ->boolean($this->testedInstance->isZero())->isTrue
+                ->boolean($this->testedInstance->ISZERO())->isTrue
+                ->boolean($this->testedInstance->isZero)->isTrue
+                ->boolean($this->testedInstance->ISZERO)->isTrue
+
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => 1)))
+            ->then
+                ->boolean($this->testedInstance->isZero())->isFalse
+                ->boolean($this->testedInstance->ISZERO())->isFalse
+                ->boolean($this->testedInstance->isZero)->isFalse
+                ->boolean($this->testedInstance->ISZERO)->isFalse
+        ;
+    }
+
+    public function testIsPositive()
+    {
+        $this
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->isPositive())->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE())->isFalse
+                ->boolean($this->testedInstance->isPositive)->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE)->isFalse
+
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => 1)))
+            ->then
+                ->boolean($this->testedInstance->isPositive())->isTrue
+                ->boolean($this->testedInstance->ISPOSITIVE())->isTrue
+                ->boolean($this->testedInstance->isPositive)->isTrue
+                ->boolean($this->testedInstance->ISPOSITIVE)->isTrue
+
+            ->if($this->newTestedInstance(array('years' => -1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->isPositive())->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE())->isFalse
+                ->boolean($this->testedInstance->isPositive)->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE)->isFalse
+
+            ->if($this->newTestedInstance)
+            ->then
+                ->boolean($this->testedInstance->isPositive())->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE())->isFalse
+                ->boolean($this->testedInstance->isPositive)->isFalse
+                ->boolean($this->testedInstance->ISPOSITIVE)->isFalse
+        ;
+    }
+
+    public function testIsNegative()
+    {
+        $this
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->isNegative())->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE())->isFalse
+                ->boolean($this->testedInstance->isNegative)->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE)->isFalse
+
+            ->if($this->newTestedInstance(array('years' => 1, 'minutes' => 1)))
+            ->then
+                ->boolean($this->testedInstance->isNegative())->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE())->isFalse
+                ->boolean($this->testedInstance->isNegative)->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE)->isFalse
+
+            ->if($this->newTestedInstance(array('years' => -1, 'minutes' => -1)))
+            ->then
+                ->boolean($this->testedInstance->isNegative())->isTrue
+                ->boolean($this->testedInstance->ISNEGATIVE())->isTrue
+                ->boolean($this->testedInstance->isNegative)->isTrue
+                ->boolean($this->testedInstance->ISNEGATIVE)->isTrue
+
+            ->if($this->newTestedInstance)
+            ->then
+                ->boolean($this->testedInstance->isNegative())->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE())->isFalse
+                ->boolean($this->testedInstance->isNegative)->isFalse
+                ->boolean($this->testedInstance->ISNEGATIVE)->isFalse
+        ;
+    }
+
 }
