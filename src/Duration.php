@@ -231,7 +231,8 @@ class Duration
             case 'hours':
             case 'minutes':
             case 'seconds':
-                return array_shift($this->inUnits($method));
+                $tmp = $this->inUnits($method);
+                return array_shift($tmp);
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
