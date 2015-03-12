@@ -29,7 +29,7 @@ class TimeZone extends \atoum
                 ->exception(function () use ($errorTZ) {
                     new testedClass($errorTZ);
                 })
-                    ->isInstanceOf('\Tiross\DateTime\InvalidTimeZoneException')
+                    ->isInstanceOf('\Tiross\DateTime\Exception\InvalidTimeZoneException')
                     ->hasCode(201)
                     ->hasMessage(sprintf('The timezone "%s" is not recognised as a valid timezone', $errorTZ))
         ;
@@ -86,6 +86,7 @@ class TimeZone extends \atoum
                 ->exception(function () use ($obj, $method) {
                     $obj->$method();
                 })
+                    ->isInstanceOf('\Tiross\DateTime\Exception\LogicException')
                     ->hasCode(299)
                     ->hasMessage(sprintf('Call to undefined method %s::%s()', get_class($obj), $method))
         ;
@@ -107,7 +108,7 @@ class TimeZone extends \atoum
                 ->exception(function () use ($obj, $property) {
                     $obj->$property;
                 })
-                    ->isInstanceOf('\Tiross\DateTime\LogicException')
+                    ->isInstanceOf('\Tiross\DateTime\Exception\LogicException')
                     ->hasCode(298)
                     ->hasMessage(sprintf('Undefined property: %s::$%s', get_class($obj), $property))
         ;
@@ -155,7 +156,7 @@ class TimeZone extends \atoum
                 ->exception(function () use ($timezone) {
                     testedClass::defaultZone($timezone);
                 })
-                    ->isInstanceOf('\Tiross\DateTime\InvalidTimeZoneException')
+                    ->isInstanceOf('\Tiross\DateTime\Exception\InvalidTimeZoneException')
                     ->hasCode(202)
                     ->hasMessage(sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone))
         ;

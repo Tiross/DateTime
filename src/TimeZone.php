@@ -26,7 +26,7 @@ class TimeZone extends \DateTimeZone
      *
      * @see http://php.net/manual/en/timezones.php List of supported timezone names
      * @param string $timezone One of the supported timezone names
-     * @throws InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     * @throws Exception\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
      *   a valid timezone
      */
     public function __construct($timezone)
@@ -35,7 +35,7 @@ class TimeZone extends \DateTimeZone
             parent::__construct($timezone);
         } catch (\Exception $e) {
             $message = sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone);
-            throw new InvalidTimeZoneException($message, 201, $e);
+            throw new Exception\InvalidTimeZoneException($message, 201, $e);
         }
     }
 
@@ -86,7 +86,7 @@ class TimeZone extends \DateTimeZone
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
-        throw new LogicException($message, 299);
+        throw new Exception\LogicException($message, 299);
     }
 
     /**
@@ -105,7 +105,7 @@ class TimeZone extends \DateTimeZone
         }
 
         $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
-        throw new LogicException($message, 298);
+        throw new Exception\LogicException($message, 298);
     }
 
     /**
@@ -118,7 +118,7 @@ class TimeZone extends \DateTimeZone
      *
      * @param  string $timezone The new default timezone
      * @return string
-     * @throws InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     * @throws Exception\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
      *   a valid timezone
      */
     public static function defaultZone($timezone = null)
@@ -130,7 +130,7 @@ class TimeZone extends \DateTimeZone
 
             if (false === $result) {
                 $message = sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone);
-                throw new InvalidTimeZoneException($message, 202);
+                throw new Exception\InvalidTimeZoneException($message, 202);
             }
         }
 
