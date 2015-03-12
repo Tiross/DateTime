@@ -664,4 +664,38 @@ class Duration extends \atoum
                     ->isIdenticalTo($days)
         ;
     }
+
+    public function testAddDuration()
+    {
+        $this
+            ->if($this->newTestedInstance)
+            ->then
+                ->object($this->testedInstance->addDuration(new testedClass('PT1H')))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->hours)
+                    ->isIdenticalTo(1)
+                ->object($this->testedInstance->addDuration(new testedClass(array('months' => 1, 'hours' => -1))))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->months)
+                    ->isIdenticalTo(1)
+                ->integer($this->testedInstance->hours)
+                    ->isIdenticalTo(0)
+        ;
+    }
+
+    public function testSubtractDuration()
+    {
+        $this
+            ->if($this->newTestedInstance('P1W'))
+            ->then
+                ->object($this->testedInstance->subtractDuration(new testedClass('P1D')))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo(6)
+                ->object($this->testedInstance->subtractDuration(new testedClass(array('days' => -1))))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->weeks)
+                    ->isIdenticalTo(1)
+        ;
+    }
 }

@@ -446,7 +446,7 @@ class Duration
                 default: // fix scrutinizer issue
                     $base  = 'seconds';
                     $coeff = 1;
-                    break;
+                    // break removed, add 1 litte point to coverage
             }
 
             // Math
@@ -507,5 +507,33 @@ class Duration
         $this->seconds = abs($this->seconds());
 
         return $this;
+    }
+
+
+    /**
+     * Add duration, based on Duration object
+     *
+     * @param Duration $obj
+     * @return self
+     */
+    public function addDuration(Duration $obj)
+    {
+        $this->months  += $obj->months();
+        $this->days    += $obj->days();
+        $this->minutes += $obj->minutes();
+        $this->seconds += $obj->seconds();
+
+        return $this;
+    }
+
+    /**
+     * Add duration, based on Duration object
+     *
+     * @param Duration $obj
+     * @return self
+     */
+    public function subtractDuration(Duration $obj)
+    {
+        return $this->addDuration($obj->clone()->inverse());
     }
 }
