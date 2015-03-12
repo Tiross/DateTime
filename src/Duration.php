@@ -147,10 +147,10 @@ class Duration
         extract($args);
 
         // Affecting
-        $this->months  = $multiplier * ($years * 12 + $months);
-        $this->days    = $multiplier * ($weeks * 7 + $days);
-        $this->minutes = $multiplier * ($hours * 60 + $minutes);
-        $this->seconds = $multiplier * $seconds;
+        $this->months  = (int) $multiplier * ($years * 12 + $months);
+        $this->days    = (int) $multiplier * ($weeks * 7 + $days);
+        $this->minutes = (int) $multiplier * ($hours * 60 + $minutes);
+        $this->seconds = (int) $multiplier * $seconds;
 
         // Adding reference
         if ($reference instanceof DateTime) {
@@ -174,7 +174,7 @@ class Duration
     /**
      * Return the reference DateTime
      *
-     * @return DateTime|null
+     * @return DateTime
      */
     public function getReferenceDate()
     {
