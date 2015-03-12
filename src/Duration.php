@@ -259,6 +259,9 @@ class Duration
             case 'hours':
             case 'minutes':
             case 'seconds':
+
+            case 'inverse':
+            case 'absolute':
                 return $this->$property();
         }
 
@@ -459,5 +462,49 @@ class Duration
         });
 
         return $results;
+    }
+
+    /**
+     * Multiply all notion of duration
+     *
+     * @param  float $factor
+     * @return self
+     */
+    public function multiply($factor)
+    {
+        $factor = (float) $factor;
+
+        $this->months  = intval($this->months * $factor);
+        $this->days    = intval($this->days * $factor);
+        $this->minutes = intval($this->minutes * $factor);
+        $this->seconds = intval($this->seconds * $factor);
+
+        return $this;
+    }
+
+    /**
+     * Make negative a positive duration or make positive a negative duration
+     *
+     * Basically, it's a shortcut for `$this->multiply(-1)`
+     *
+     * @return self
+     */
+    public function inverse()
+    {
+        return $this->multiply(-1);
+    }
+
+    /**
+     * Change all values to absolute ones
+     * @return self
+     */
+    public function absolute()
+    {
+        $this->months  = abs($this->months());
+        $this->days    = abs($this->days());
+        $this->minutes = abs($this->minutes());
+        $this->seconds = abs($this->seconds());
+
+        return $this;
     }
 }

@@ -592,7 +592,6 @@ class Duration extends \atoum
         ;
     }
 
-
     public function unitsProvider()
     {
         // $years, $months, $weeks, $days, $hours, $minutes, $seconds
@@ -604,5 +603,65 @@ class Duration extends \atoum
             array(-1, -1, -1, -1, -1, -1, -1),
             array(rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100)),
         );
+    }
+
+
+
+
+    public function testMultiply()
+    {
+        $this
+            ->given($seconds = 1)
+            ->if($this->newTestedInstance(array('seconds' => $seconds)))
+            ->then
+                ->integer($this->testedInstance->multiply(1)->seconds)
+                    ->isIdenticalTo($seconds)
+
+                ->integer($this->testedInstance->multiply(-20)->seconds)
+                    ->isIdenticalTo($seconds * -20)
+
+                ->integer($this->testedInstance->multiply(0.1)->seconds)
+                    ->isIdenticalTo($seconds * -2)
+
+                ->integer($this->testedInstance->multiply(-0.5)->seconds)
+                    ->isIdenticalTo($seconds)
+        ;
+    }
+
+    public function testInverse()
+    {
+        $this
+            ->given($seconds = 1)
+            ->if($this->newTestedInstance(array('seconds' => $seconds)))
+            ->then
+                ->integer($this->testedInstance->inverse()->seconds)
+                    ->isIdenticalTo($seconds * -1)
+
+                ->integer($this->testedInstance->inverse->seconds)
+                    ->isIdenticalTo($seconds)
+        ;
+    }
+
+    public function testAbsolute()
+    {
+        $this
+            ->boolean($this->newTestedInstance('-P1MT3H')->absolute()->isPositive())
+                ->isTrue
+
+            ->object($this->newTestedInstance('P1MT3H')->absolute())
+                ->isEqualTo($this->newTestedInstance('P1MT3H'))
+
+            ->if($seconds = (int) rand(0, 100))
+            ->and($this->newTestedInstance(array('seconds' => -1 * $seconds)))
+            ->then
+                ->integer($this->testedInstance->absolute->seconds)
+                ->isEqualTo(abs($seconds))
+
+            ->given($days = (int) rand(0, PHP_INT_MAX))
+            ->if($this->newTestedInstance(array('days' => $days)))
+            ->then
+                ->integer($this->testedInstance->inverse->absolute->days)
+                    ->isIdenticalTo($days)
+        ;
     }
 }
