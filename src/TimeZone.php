@@ -11,15 +11,23 @@ namespace Tiross\DateTime;
  * Representation of time zone
  *
  * @author Tiross
+ * @method self clone() Return a clone of actual instance
+ * @property self $clone Use as a shortcut for method clone()
+ * @property array $getLocation Use as a shortcut for method getLocation()
+ * @property string $getName Use as a shortcut for method getName()
+ * @property array $getTransitions Use as a shortcut for method getTransitions()
+ * @property array $listAbbreviations Use as a shortcut for method listAbbreviations()
+ * @property array $listIdentifiers Use as a shortcut for method listIdentifiers()
  */
 class TimeZone extends \DateTimeZone
 {
     /**
      * Creates new TimeZone object
      *
-     * @see http://php.net/manual/en/timezones.php list of supported timezone names
+     * @see http://php.net/manual/en/timezones.php List of supported timezone names
      * @param string $timezone One of the supported timezone names
-     * @throws \DateTime\InvalidTimeZoneException Thrown if supplied timezone is not recognised as a valid timezone.
+     * @throws \DateTime\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     *   a valid timezone
      */
     public function __construct($timezone)
     {
@@ -60,6 +68,7 @@ class TimeZone extends \DateTimeZone
     /**
      * Return a clone of this object
      * @return self
+     * @ignore
      */
     public function cloneObject()
     {
@@ -67,6 +76,7 @@ class TimeZone extends \DateTimeZone
     }
 
     /**
+     * @ignore
      */
     public function __call($method, $arguments)
     {
@@ -80,6 +90,7 @@ class TimeZone extends \DateTimeZone
     }
 
     /**
+     * @ignore
      */
     public function __get($property)
     {
@@ -107,6 +118,8 @@ class TimeZone extends \DateTimeZone
      *
      * @param  string $timezone The new default timezone
      * @return string
+     * @throws \DateTime\InvalidTimeZoneException Thrown if supplied timezone is not recognised as
+     *   a valid timezone
      */
     public static function defaultZone($timezone = null)
     {

@@ -184,12 +184,12 @@ class TimeZone extends \atoum
     public function getProvider()
     {
         return array(
+            'getLocation',
+            'getName',
+            'getTransitions',
+            'listAbbreviations',
+            'listIdentifiers',
             'GeTlOcAtIoN',
-            'getlocation',
-            'getname',
-            'gettransitions',
-            'listabbreviations',
-            'listidentifiers',
         );
     }
 }
