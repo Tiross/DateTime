@@ -83,8 +83,8 @@ class TimeZone extends \atoum
             ->if($obj = $this->newTestedInstance('UTC'))
             ->and($method = uniqid())
             ->then
-                ->exception(function () use ($method) {
-                    $this->testedInstance->$method();
+                ->exception(function () use ($obj, $method) {
+                    $obj->$method();
                 })
                     ->hasCode(299)
                     ->hasMessage(sprintf('Call to undefined method %s::%s()', get_class($obj), $method))
@@ -104,8 +104,8 @@ class TimeZone extends \atoum
 
             ->if($property = $method . uniqid())
             ->then
-                ->exception(function () use ($property) {
-                    $this->testedInstance->$property;
+                ->exception(function () use ($obj, $property) {
+                    $obj->$property;
                 })
                     ->isInstanceOf('\Tiross\DateTime\LogicException')
                     ->hasCode(298)
