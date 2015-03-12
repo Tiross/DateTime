@@ -203,4 +203,31 @@ class Duration
 
         return new Duration($args);
     }
+
+    /**
+     * Clone
+     *
+     * @return self
+     * @internal
+     */
+    public function cloneObject()
+    {
+        return clone $this;
+    }
+
+    public function __call($method, $arguments)
+    {
+        switch (strtolower($method)) {
+            case 'clone':
+                return $this->cloneObject();
+        }
+    }
+
+    public function __get($property)
+    {
+        switch (strtolower($property)) {
+            case 'clone':
+                return $this->$property();
+        }
+    }
 }

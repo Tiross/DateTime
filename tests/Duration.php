@@ -84,4 +84,26 @@ class Duration extends \atoum
                     ->isEqualTo($this->newTestedInstance($string))
         ;
     }
+
+    public function testClone()
+    {
+        $this
+            ->given($calendar = array('Y', 'M', 'W', 'D'))
+            ->and($clock = array('H', 'M', 'S'))
+            ->when(function () use (&$calendar, &$clock) {
+                shuffle($calendar);
+                shuffle($clock);
+            })
+
+            ->if($string = 'P' . rand(0, 30) . current($calendar) . 'T' . rand(0, 30) . current($clock))
+
+            ->then
+                ->object($this->newTestedInstance($string))
+                    ->isCloneOf($this->testedInstance->cloneObject()) // not recommanded
+                    ->isCloneOf($this->testedInstance->clone())
+                    ->isCloneOf($this->testedInstance->CLONE())
+                    ->isCloneOf($this->testedInstance->clone)
+                    ->isCloneOf($this->testedInstance->CLONE)
+        ;
+    }
 }
