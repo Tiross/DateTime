@@ -1,8 +1,8 @@
 <?php
+
 /**
- * Date and Time
+ * Better dates and times
  *
- * @package DateTime
  * @author Tiross
  */
 namespace Tiross\DateTime;

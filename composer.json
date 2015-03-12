@@ -1,6 +1,6 @@
 {
   "name": "tiross/datetime",
-  "description": "Better dates",
+  "description": "Better dates and times",
   "license": "MIT",
   "keywords": ["date","time","timezone","datetime"],
   "authors": [
