@@ -698,4 +698,109 @@ class Duration extends \atoum
                     ->isIdenticalTo(1)
         ;
     }
+
+    public function testAddInterval()
+    {
+        $this
+            ->given($obj = new \DateInterval('PT1H'))
+            ->and($obj->invert = 1)
+
+            ->if($this->newTestedInstance)
+            ->then
+                ->object($this->testedInstance->addInterval(new \DateInterval('PT1H')))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->hours)
+                    ->isIdenticalTo(1)
+                ->object($this->testedInstance->addInterval($obj))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->hours)
+                    ->isIdenticalTo(0)
+        ;
+    }
+
+    public function testSubtractInterval()
+    {
+        $this
+            ->given($obj = new \DateInterval('P1D'))
+            ->and($obj->invert = 1)
+
+            ->if($this->newTestedInstance('P1W'))
+            ->then
+                ->object($this->testedInstance->subtractInterval(new \DateInterval('P1D')))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo(6)
+                ->object($this->testedInstance->subtractInterval($obj))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->weeks)
+                    ->isIdenticalTo(1)
+        ;
+    }
+
+    public function testAdd()
+    {
+        $this
+            ->given($this->newTestedInstance)
+            ->and($day = rand(0, 100))
+            ->and($string = 'P' . $day . 'D')
+
+            ->assert('Using Duration')
+                ->object($this->testedinstance->add(new testedClass($string)))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day)
+
+            ->assert('Using DateInterval')
+                ->object($this->testedinstance->add(new \DateInterval($string)))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day * 2)
+
+            ->assert('Using string')
+                ->object($this->testedinstance->add($string))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day * 3)
+
+            ->assert('Using null')
+                ->object($this->testedinstance->add(null))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day * 3)
+        ;
+    }
+
+    public function testSubtract()
+    {
+        $this
+            ->given($day = rand(0, 100))
+            ->and($string = 'P' . $day . 'D')
+
+            ->if($this->newTestedInstance(array('days' => $day * 4)))
+
+            ->assert('Using Duration')
+                ->object($this->testedinstance->subtract(new testedClass($string)))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day * 3)
+
+            ->assert('Using DateInterval')
+                ->object($this->testedinstance->sub(new \DateInterval($string)))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day * 2)
+
+            ->assert('Using string')
+                ->object($this->testedinstance->subtract($string))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day)
+
+            ->assert('Using null')
+                ->object($this->testedinstance->sub(null))
+                    ->isTestedInstance
+                ->integer($this->testedInstance->days)
+                    ->isIdenticalTo($day)
+        ;
+    }
 }

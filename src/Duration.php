@@ -233,6 +233,9 @@ class Duration
             case 'seconds':
                 $tmp = $this->inUnits($method);
                 return array_shift($tmp);
+
+            case 'sub':
+                return $this->subtract($arguments[0]);
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
@@ -511,7 +514,7 @@ class Duration
 
 
     /**
-     * Add duration, based on Duration object
+     * Add duration, based on `Duration` object
      *
      * @param Duration $obj
      * @return self
@@ -527,7 +530,7 @@ class Duration
     }
 
     /**
-     * Add duration, based on Duration object
+     * Subtract duration, based on `Duration` object
      *
      * @param Duration $obj
      * @return self
@@ -535,5 +538,82 @@ class Duration
     public function subtractDuration(Duration $obj)
     {
         return $this->addDuration($obj->clone()->inverse());
+    }
+
+    /**
+     * Add duration, based on `DateInterval` object
+     *
+     * @param \DateInterval $obj
+     * @return self
+     */
+    public function addInterval(\DateInterval $obj)
+    {
+        return $this->addDuration(static::fromDateInterval($obj));
+    }
+
+    /**
+     * Subtract duration, based on `DateInterval` object
+     *
+     * @param \DateInterval $obj
+     * @return self
+     */
+    public function subtractInterval(\DateInterval $obj)
+    {
+        return $this->subtractDuration(static::fromDateInterval($obj));
+    }
+
+
+    /**
+     * Add duration
+     *
+     * This method is a syntactic sugar.
+     * The parameters given to this method are used to create a new object if they are not already an `Duration`
+     * or a `DateInterval`.
+     *
+     * @param mixed $args
+     * @return self
+     */
+    public function add($args)
+    {
+        if (is_null($args)) {
+            return $this;
+        }
+
+        if ($args instanceof \DateInterval) {
+            return $this->addInterval($args);
+        }
+
+        if ($args instanceof self) {
+            return $this->addDuration($args);
+        }
+
+        return $this->addDuration(new static($args));
+    }
+
+    /**
+     * Subtract duration
+     *
+     * This method is a syntactic sugar.
+     * The parameters given to this method are used to create a new object if they are not already an `Duration`
+     * or a `DateInterval`.
+     *
+     * @param mixed $args
+     * @return self
+     */
+    public function subtract($args)
+    {
+        if (is_null($args)) {
+            return $this;
+        }
+
+        if ($args instanceof \DateInterval) {
+            return $this->subtractInterval($args);
+        }
+
+        if ($args instanceof self) {
+            return $this->subtractDuration($args);
+        }
+
+        return $this->subtractDuration(new static($args));
     }
 }
