@@ -266,6 +266,8 @@ class Duration
 
             case 'inverse':
             case 'absolute':
+            case 'getcalendarduration':
+            case 'getclockduration':
                 return $this->$property();
         }
 
@@ -615,5 +617,28 @@ class Duration
         }
 
         return $this->subtractDuration(new static($args));
+    }
+
+
+    /**
+     * Returns a new object with the same calendar delta (months and days only) as the current object.
+     * @return self
+     */
+    public function getCalendarDuration()
+    {
+        $units = array('months', 'days');
+
+        return new Duration($this->inUnits($units));
+    }
+
+    /**
+     * Returns a new object with the same clock deltas (minutes and seconds) as the current object.
+     * @return self
+     */
+    public function getClockDuration()
+    {
+        $units = array('minutes', 'seconds');
+
+        return new Duration($this->inUnits($units));
     }
 }

@@ -803,4 +803,67 @@ class Duration extends \atoum
                     ->isIdenticalTo($day)
         ;
     }
+
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testGetCalendarDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($date = array(
+                'years'  => $years,
+                'months' => $months,
+                'weeks'  => $weeks,
+                'days'   => $days,
+            ))
+            ->and($time = array(
+                'hours'   => $hours,
+                'minutes' => $minutes,
+                'seconds' => $seconds,
+            ))
+
+            ->if($this->newTestedInstance(array_merge($date, $time)))
+            ->then
+                ->object($this->testedInstance->clone->getCalendarDuration())
+                    ->isEqualTo(new testedClass($date))
+
+                ->object($this->testedInstance->clone->getCalendarDuration)
+                    ->isEqualTo(new testedClass($date))
+
+                ->object($this->testedInstance->clone->GETCALENDARDURATION)
+                    ->isEqualTo(new testedClass($date))
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testGetClockDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($date = array(
+                'years'  => $years,
+                'months' => $months,
+                'weeks'  => $weeks,
+                'days'   => $days,
+            ))
+            ->and($time = array(
+                'hours'   => $hours,
+                'minutes' => $minutes,
+                'seconds' => $seconds,
+            ))
+
+            ->if($this->newTestedInstance(array_merge($date, $time)))
+            ->then
+                ->object($this->testedInstance->clone->getClockDuration())
+                    ->isEqualTo(new testedClass($time))
+
+                ->object($this->testedInstance->clone->getClockDuration)
+                    ->isEqualTo(new testedClass($time))
+
+                ->object($this->testedInstance->clone->GETCLOCKDURATION)
+                    ->isEqualTo(new testedClass($time))
+        ;
+    }
 }
