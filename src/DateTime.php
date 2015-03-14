@@ -12,7 +12,7 @@ class DateTime extends \DateTime
     /** @type bool */
     protected $isFinite = true;
 
-    public function __construct($args = null, $tz = null)
+    public function __construct($args = null, $zone = null)
     {
         $date = $args;
 
@@ -33,16 +33,43 @@ class DateTime extends \DateTime
 
                 $date = implode('-', $tmpDate) . 'T' . implode(':', $tmpTime);
 
-                $tz = $timezone;
+                $zone = $timezone ?: $zone;
             }
         }
 
-        if (is_string($tz)) {
-            $tz = new TimeZone($tz);
-        } elseif ($tz instanceof \DateTimeZone) {
-            $tz = TimeZone::convert($tz);
+        if (is_string($zone)) {
+            $zone = new TimeZone($zone);
+        } elseif ($zone instanceof \DateTimeZone) {
+            $zone = TimeZone::convert($zone);
         }
 
-        parent::__construct($date, $tz);
+        parent::__construct($date, $zone);
+    }
+
+    public function cloneObject()
+    {
+        return clone $this;
+    }
+
+    public function __call($method, $arguments)
+    {
+        switch (strtolower($method)) {
+            case 'clone':
+                return $this->cloneObject();
+        }
+
+        $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
+        throw new Exception\LogicException($message, 199);
+    }
+
+    public function __get($property)
+    {
+        switch (strtolower($property)) {
+            case 'clone':
+                return $this->$property();
+        }
+
+        $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
+        throw new Exception\LogicException($message, 198);
     }
 }
