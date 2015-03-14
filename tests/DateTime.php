@@ -66,8 +66,8 @@ class DateTime extends \atoum
         ;
     }
 
-    /** @php < 5.5 */
-    public function test__construct_Before55()
+    /** @php 5.5 */
+    public function test__construct_After55()
     {
         $this
             ->given($year = rand(2000, 2020))
