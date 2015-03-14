@@ -236,6 +236,9 @@ class Duration
 
             case 'sub':
                 return $this->subtract($arguments[0]);
+
+            case 'tostring':
+                return (string) $this;
         }
 
         $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
@@ -255,6 +258,8 @@ class Duration
             case 'iszero':
             case 'ispositive':
             case 'isnegative':
+            case 'isfinite':
+            case 'isinfinite':
 
             case 'years':
             case 'months':
@@ -359,6 +364,31 @@ class Duration
     {
         return !$this->hasPositive() && $this->hasNegative();
     }
+
+    /**
+     * Check if duration is finite
+     *
+     * This method is useful for dealing with infinite duration.
+     *
+     * @return bool
+     */
+    public function isFinite()
+    {
+        return $this->isFinite;
+    }
+
+    /**
+     * Check if duration is infinite
+     *
+     * This method is useful for dealing with infinite duration.
+     *
+     * @return bool
+     */
+    public function isInfinite()
+    {
+        return !$this->isFinite();
+    }
+
 
     /**
      * Returns the length of the duration in the units (any of those that can be passed to new) given as arguments
@@ -645,7 +675,7 @@ class Duration
     /**
      * Cast to string
      *
-     * Becareful, the current object can handle durations with both positive and negative values.
+     * Be careful, the current object can handle durations with both positive and negative values.
      * This string representation can't.
      *
      * @return string
@@ -692,5 +722,56 @@ class Duration
         }
 
         return $tmp;
+    }
+
+    /**
+     * Returns a new DateInterval object from current object
+     *
+     * Be careful, the current object can handle durations with both positive and negative values.
+     * DateInterval can't.
+     *
+     * You should consider avoid using this method as long as you are not sure if duration is
+     * strictly positive or negative.
+     * Please have a look on `toDateIntervalArray`instead.
+     *
+     * @see Duration::toDateIntervalArray() `toDateIntervalArray` method
+     * @return \DateInterval
+     */
+    public function toDateInterval()
+    {
+        $interval = new \DateInterval($this->clone()->absolute()->toString());
+
+        $interval->invert = $this->isNegative();
+
+        return $interval;
+    }
+
+    /**
+     * Returns an array of DateInterval objects from current object
+     *
+     * This is mostly useful for doing date math in DateTime.
+     *
+     * @return \DateInterval[]
+     */
+    public function toDateIntervalArray()
+    {
+        $intervals = array();
+
+        if ($this->isZero()) {
+            return array(new \DateInterval('P0D'));
+        }
+
+        $units  = array('months', 'days', 'minutes', 'seconds');
+        $values = $this->inUnits($units);
+
+        foreach ($values as $unit => $value) {
+            if ($value) {
+                $obj = new Duration(array($unit => $value));
+
+                $intervals[] = $obj->toDateInterval();
+            }
+        }
+
+        return $intervals;
     }
 }

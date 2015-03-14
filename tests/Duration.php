@@ -916,6 +916,93 @@ class Duration extends \atoum
             ->then
                 ->castToString($this->newTestedInstance($params))
                     ->isIdenticalTo($string)
+                    ->isIdenticalTo($this->testedInstance->toString())
             ;
+    }
+
+    public function testToDateInterval()
+    {
+        $this
+            ->given($months = rand(0, 300))
+            ->and($minutes = rand(0, 300))
+            ->and($string = 'P' . $months . 'MT' . $minutes . 'M')
+
+            ->if($this->newTestedInstance($string))
+            ->then
+                ->dateInterval($this->testedInstance->toDateInterval())
+                    ->isEqualTo($obj = new \DateInterval($string))
+
+            ->if($obj->invert = 1)
+            ->then
+                ->dateInterval($this->testedInstance->inverse()->toDateInterval())
+                    ->isEqualTo($obj)
+        ;
+    }
+
+    public function testToDateIntervalArray()
+    {
+        $this
+            ->if($this->newTestedInstance(array('years' => 1, 'months' => -2, 'days' => -3, 'hours' => -1)))
+
+            ->and($months = new \DateInterval('P10M'))
+
+            ->and($days = new \DateInterval('P3D'))
+            ->and($days->invert = 1)
+
+            ->and($minutes = new \DateInterval('PT60M'))
+            ->and($minutes->invert = 1)
+
+            ->then
+                ->array($arr = $this->testedInstance->toDateIntervalArray())
+                    ->hasSize(3)
+
+                ->dateInterval($arr[0])
+                    ->isEqualTo($months)
+
+                ->dateInterval($arr[1])
+                    ->isEqualTo($days)
+
+                ->dateInterval($arr[2])
+                    ->isEqualTo($minutes)
+
+            ->if($this->newTestedInstance)
+            ->and($empty = new \DateInterval('P0M'))
+            ->then
+                ->array($arr = $this->testedInstance->toDateIntervalArray())
+                    ->hasSize(1)
+
+                ->dateInterval($arr[0])
+                    ->isEqualTo($empty)
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testIsFinite($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->if($this->newTestedInstance($params))
+            ->then
+                ->boolean($this->testedInstance->isFinite())->isTrue
+                ->boolean($this->testedInstance->isFinite)->isTrue
+                ->boolean($this->testedInstance->ISFINITE)->isTrue
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+     */
+    public function testIsInfinite($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->if($this->newTestedInstance($params))
+            ->then
+                ->boolean($this->testedInstance->isInfinite())->isFalse
+                ->boolean($this->testedInstance->isInfinite)->isFalse
+                ->boolean($this->testedInstance->ISINFINITE)->isFalse
+        ;
     }
 }
