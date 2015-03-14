@@ -46,6 +46,11 @@ class DateTime extends \DateTime
         parent::__construct($date, $zone);
     }
 
+    public static function now()
+    {
+        return new static;
+    }
+
     public function cloneObject()
     {
         return clone $this;
