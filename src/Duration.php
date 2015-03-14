@@ -641,4 +641,56 @@ class Duration
 
         return new Duration($this->inUnits($units));
     }
+
+    /**
+     * Cast to string
+     *
+     * Becareful, the current object can handle durations with both positive and negative values.
+     * This string representation can't.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $tmp = $this->inUnits('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds');
+        extract($tmp);
+
+        $date = '';
+        if ($years) {
+            $date .= abs($years) . 'Y';
+        }
+        if ($months) {
+            $date .= abs($months) . 'M';
+        }
+        if ($weeks) {
+            $date .= abs($weeks) . 'W';
+        }
+        if ($days) {
+            $date .= abs($days) . 'D';
+        }
+
+        $time = '';
+        if ($hours) {
+            $time .= abs($hours) . 'H';
+        }
+        if ($minutes) {
+            $time .= abs($minutes) . 'M';
+        }
+        if ($seconds) {
+            $time .= abs($seconds) . 'S';
+        }
+
+        if (!$date && !$time) {
+            return 'P0D';
+        }
+
+        $tmp = $this->isNegative() ? '-' : '';
+        $tmp .= 'P' . $date;
+
+        if ($time) {
+            $tmp .= 'T' . $time;
+        }
+
+        return $tmp;
+    }
 }

@@ -599,6 +599,7 @@ class Duration extends \atoum
             array(5, 2, 0, -10, 1, 3, -5),
             array(0, 0, 0, 0, 0, 0, 3600),
             array(1, 0, 0, 0, 0, 0, 0),
+            array(0, 0, 0, 0, 0, 0, 0),
             array(0, 0, 1, 0, 0, 0, 0),
             array(-1, -1, -1, -1, -1, -1, -1),
             array(rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100)),
@@ -865,5 +866,56 @@ class Duration extends \atoum
                 ->object($this->testedInstance->clone->GETCLOCKDURATION)
                     ->isEqualTo(new testedClass($time))
         ;
+    }
+
+    /**
+    * @dataProvider unitsProvider
+    */
+    public function testCastToString($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    {
+        $this
+            ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->if($obj = $this->newTestedInstance($params))
+
+            ->and($string = '')
+            ->when(function () use (&$string, $obj) {
+                if ($obj->isZero()) {
+                    $string = 'P0D';
+                } else {
+                    $values = $obj->inUnits('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds');
+
+                    $date = 'P';
+                    if ($values['years']) {
+                        $date .= abs($values['years']) . 'Y';
+                    }
+                    if ($values['months']) {
+                        $date .= abs($values['months']) . 'M';
+                    }
+                    if ($values['weeks']) {
+                        $date .= abs($values['weeks']) . 'W';
+                    }
+                    if ($values['days']) {
+                        $date .= abs($values['days']) . 'D';
+                    }
+
+                    $time = 'T';
+                    if ($values['hours']) {
+                        $time .= abs($values['hours']) . 'H';
+                    }
+                    if ($values['minutes']) {
+                        $time .= abs($values['minutes']) . 'M';
+                    }
+                    if ($values['seconds']) {
+                        $time .= abs($values['seconds']) . 'S';
+                    }
+
+                    $string = ($obj->isNegative() ? '-' : '') . $date . ($time != 'T' ? $time : '');
+                }
+            })
+
+            ->then
+                ->castToString($this->newTestedInstance($params))
+                    ->isIdenticalTo($string)
+            ;
     }
 }
