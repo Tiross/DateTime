@@ -156,4 +156,248 @@ class DateTime extends \atoum
                     ->isEqualTo($dt)
         ;
     }
+
+    public function testYear()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('Y', $timestamp) * 1)
+            ->and($inPast = $actual - 10)
+            ->and($inFuture = $actual + 10)
+
+            ->if($this->newTestedInstance('@' . $timestamp))
+
+            ->then
+                ->integer($this->testedInstance->year($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->year())
+                    ->isIdenticalTo($this->testedInstance->year)
+                    ->isIdenticalTo($this->testedInstance->YEAR)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->year($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->year())
+                    ->isIdenticalTo($this->testedInstance->year)
+                    ->isIdenticalTo($this->testedInstance->YEAR)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    public function testMonth()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('m', $timestamp) * 1)
+            ->and($inPast = $actual - 1)
+            ->and($inFuture = $actual + 1)
+
+            ->if($this->newTestedInstance('@' . $timestamp))
+
+            ->then
+                ->integer($this->testedInstance->month($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->month())
+                    ->isIdenticalTo($this->testedInstance->month)
+                    ->isIdenticalTo($this->testedInstance->MONTH)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->month($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->month())
+                    ->isIdenticalTo($this->testedInstance->month)
+                    ->isIdenticalTo($this->testedInstance->MONTH)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    public function testDay()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('d', $timestamp) * 1)
+            ->and($inPast = $actual - 1)
+            ->and($inFuture = $actual + 1)
+
+            ->if($this->newTestedInstance('@' . $timestamp))
+
+            ->then
+                ->integer($this->testedInstance->day($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->day())
+                    ->isIdenticalTo($this->testedInstance->day)
+                    ->isIdenticalTo($this->testedInstance->DAY)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->day($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->day())
+                    ->isIdenticalTo($this->testedInstance->day)
+                    ->isIdenticalTo($this->testedInstance->DAY)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    public function testHour()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('H', $timestamp) * 1)
+            ->and($inPast = $actual == 0 ? 23 : $actual - 1)
+            ->and($inFuture = $actual >= 23 ? 0 : $actual + 1)
+
+            ->if($this->newTestedInstance('@' . $timestamp, 'UTC'))
+
+            ->then
+                ->integer($this->testedInstance->hour($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->hour())
+                    ->isIdenticalTo($this->testedInstance->hour)
+                    ->isIdenticalTo($this->testedInstance->HOUR)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->hour($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->hour())
+                    ->isIdenticalTo($this->testedInstance->hour)
+                    ->isIdenticalTo($this->testedInstance->HOUR)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    public function testMinute()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('i', $timestamp) * 1)
+            ->and($inPast = $actual == 0 ? 59 : $actual - 1)
+            ->and($inFuture = $actual >= 60 ? 0 : $actual + 1)
+
+            ->if($this->newTestedInstance('@' . $timestamp))
+
+            ->then
+                ->integer($this->testedInstance->minute($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->minute())
+                    ->isIdenticalTo($this->testedInstance->minute)
+                    ->isIdenticalTo($this->testedInstance->MINUTE)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->minute($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->minute())
+                    ->isIdenticalTo($this->testedInstance->minute)
+                    ->isIdenticalTo($this->testedInstance->MINUTE)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    public function testSecond()
+    {
+        $this
+            ->given($timestamp = time())
+            ->and($actual = date('s', $timestamp) * 1)
+            ->and($inPast = $actual == 0 ? 59 : $actual - 1)
+            ->and($inFuture = $actual >= 60 ? 0 : $actual + 1)
+
+            ->if($this->newTestedInstance('@' . $timestamp))
+
+            ->then
+                ->integer($this->testedInstance->second($inPast))
+                    ->isIdenticalTo($actual)
+
+                ->integer($this->testedInstance->second())
+                    ->isIdenticalTo($this->testedInstance->second)
+                    ->isIdenticalTo($this->testedInstance->SECOND)
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->second($inFuture))
+                    ->isIdenticalTo($inPast)
+
+                ->integer($this->testedInstance->second())
+                    ->isIdenticalTo($this->testedInstance->second)
+                    ->isIdenticalTo($this->testedInstance->SECOND)
+                    ->isIdenticalTo($inFuture)
+        ;
+    }
+
+    /** @dataProvider dateProvider */
+    public function testYmd($ymd, $dmy)
+    {
+        $this
+            ->if($this->newTestedInstance($ymd))
+            ->then
+                ->string($this->testedInstance->ymd())
+                    ->isIdenticalTo($this->testedInstance->ymd)
+                    ->isIdenticalTo($this->testedInstance->YmD)
+                    ->isIdenticalTo($this->testedInstance->format('Y-m-d'))
+                    ->isIdenticalTo($ymd)
+
+                ->string($this->testedInstance->ymd(' '))
+                    ->isIdenticalTo(str_replace('-', ' ', $ymd))
+        ;
+    }
+
+    /** @dataProvider dateProvider */
+    public function testDmy($ymd, $dmy)
+    {
+        $this
+            ->if($this->newTestedInstance($ymd))
+            ->then
+                ->string($this->testedInstance->dmy())
+                    ->isIdenticalTo($this->testedInstance->dmy)
+                    ->isIdenticalTo($this->testedInstance->DmY)
+                    ->isIdenticalTo($this->testedInstance->format('d/m/Y'))
+                    ->isIdenticalTo($dmy)
+
+                ->string($this->testedInstance->dmy(' '))
+                    ->isIdenticalTo(str_replace('/', ' ', $dmy))
+        ;
+    }
+
+    /** @dataProvider timeProvider */
+    public function testHms($time)
+    {
+        $this
+            ->if($this->newTestedInstance($time))
+            ->then
+                ->string($this->testedInstance->hms())
+                    ->isIdenticalTo($this->testedInstance->hms)
+                    ->isIdenticalTo($this->testedInstance->HmS)
+                    ->isIdenticalTo($this->testedInstance->format('H:i:s'))
+
+                ->string($this->testedInstance->hms(' '))
+                    ->isIdenticalTo(str_replace(':', ' ', $time))
+        ;
+    }
+
+    public function dateProvider()
+    {
+        // $ymd, $dmy
+        return array(
+            array('2015-01-01', '01/01/2015'),
+            array('1999-05-12', '12/05/1999'),
+            array('1970-01-01', '01/01/1970'),
+        );
+    }
+
+    public function timeProvider()
+    {
+        // $time
+        return array(
+            array('12:34:56'),
+            array('01:01:01'),
+            array('23:59:59'),
+        );
+    }
 }
