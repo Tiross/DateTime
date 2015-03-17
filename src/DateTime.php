@@ -7,6 +7,25 @@
  */
 namespace Tiross\DateTime;
 
+
+/**
+ * Better dates and times
+ *
+ * @author Tiross
+ *
+ * @property integer $year Year
+ * @property integer $month Month
+ * @property integer $day Day
+ * @property integer $hour Hour
+ * @property integer $minute Minute
+ * @property integer $second Second
+ * @property self $clone A new clone of current object
+ * @property string $ymd A string representation of current object, format YYYY-MM-DD
+ * @property string $dmy A string representation of current object, format DD/MM/YYYY
+ * @property string $hms A string representation of current object, format HH:MM:SS
+ *
+ * @method self clone() A new clone of current object
+ */
 class DateTime extends \DateTime
 {
     /** @type bool */
@@ -63,7 +82,7 @@ class DateTime extends \DateTime
                 return $this->cloneObject();
         }
 
-        $message = sprintf('Call to undefined method %s::%s()', __CLASS__, $method);
+        $message = $this->printf('Call to undefined method %s::%s()', array(__CLASS__, $method));
         throw new Exception\LogicException($message, 199);
     }
 
@@ -85,7 +104,7 @@ class DateTime extends \DateTime
                 return $this->$property();
         }
 
-        $message = sprintf('Undefined property: %s::$%s', __CLASS__, $property);
+        $message = $this->printf('Undefined property: %s::$%s', array(__CLASS__, $property));
         throw new Exception\LogicException($message, 198);
     }
 
@@ -301,8 +320,8 @@ class DateTime extends \DateTime
                 // no break
         }
 
-        parent::setDate($year, $month, $day);
-        parent::setTime($hour, $minute, $second);
+        $this->setDate($year, $month, $day);
+        $this->setTime($hour, $minute, $second);
 
         return $this;
     }
