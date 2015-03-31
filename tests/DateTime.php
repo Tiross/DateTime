@@ -7,6 +7,11 @@ use Tiross\DateTime\TimeZone;
 
 class DateTime extends \atoum
 {
+    public function setUp()
+    {
+        date_default_timezone_set('UTC');
+    }
+
     public function testClass()
     {
         $this
@@ -160,10 +165,15 @@ class DateTime extends \atoum
     public function testYear()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('Y', $timestamp) * 1)
-            ->and($inPast = $actual - 10)
-            ->and($inFuture = $actual + 10)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
+
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = rand(1, 10))
+            ->and($actual = (int) date('Y', $timestamp))
+            ->and($inPast = (int) date('Y', mktime($hour, $minute, $second, $month, $day, $year - $diff)))
+            ->and($inFuture = (int) date('Y', mktime($hour, $minute, $second, $month, $day, $year + $diff)))
 
             ->if($this->newTestedInstance('@' . $timestamp))
 
@@ -189,10 +199,15 @@ class DateTime extends \atoum
     public function testMonth()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('m', $timestamp) * 1)
-            ->and($inPast = $actual - 1)
-            ->and($inFuture = $actual + 1)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
+
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = rand(1, 5))
+            ->and($actual = (int) date('m', $timestamp))
+            ->and($inPast = (int) date('m', mktime($hour, $minute, $second, $month - $diff, $day, $year)))
+            ->and($inFuture = (int) date('m', mktime($hour, $minute, $second, $month + $diff, $day, $year)))
 
             ->if($this->newTestedInstance('@' . $timestamp))
 
@@ -218,10 +233,15 @@ class DateTime extends \atoum
     public function testDay()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('d', $timestamp) * 1)
-            ->and($inPast = $actual - 1)
-            ->and($inFuture = $actual + 1)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
+
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = rand(1, 4))
+            ->and($actual = (int) date('d', $timestamp))
+            ->and($inPast = (int) date('d', mktime($hour, $minute, $second, $month, $day - $diff, $year)))
+            ->and($inFuture = (int) date('d', mktime($hour, $minute, $second, $month, $day + $diff, $year)))
 
             ->if($this->newTestedInstance('@' . $timestamp))
 
@@ -247,12 +267,17 @@ class DateTime extends \atoum
     public function testHour()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('H', $timestamp) * 1)
-            ->and($inPast = $actual == 0 ? 23 : $actual - 1)
-            ->and($inFuture = $actual >= 23 ? 0 : $actual + 1)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
 
-            ->if($this->newTestedInstance('@' . $timestamp, 'UTC'))
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = rand(1, 6))
+            ->and($actual = (int) date('G', $timestamp))
+            ->and($inPast = (int) date('G', mktime($hour - $diff, $minute, $second, $month, $day, $year)))
+            ->and($inFuture = (int) date('G', mktime($hour + $diff, $minute, $second, $month, $day, $year)))
+
+            ->if($this->newTestedInstance('@' . $timestamp))
 
             ->then
                 ->integer($this->testedInstance->hour($inPast))
@@ -276,10 +301,15 @@ class DateTime extends \atoum
     public function testMinute()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('i', $timestamp) * 1)
-            ->and($inPast = $actual == 0 ? 59 : $actual - 1)
-            ->and($inFuture = $actual >= 60 ? 0 : $actual + 1)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
+
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = rand(1, 10))
+            ->and($actual = (int) date('i', $timestamp))
+            ->and($inPast = (int) date('i', mktime($hour, $minute - $diff, $second, $month, $day, $year)))
+            ->and($inFuture = (int) date('i', mktime($hour, $minute + $diff, $second, $month, $day, $year)))
 
             ->if($this->newTestedInstance('@' . $timestamp))
 
@@ -305,10 +335,15 @@ class DateTime extends \atoum
     public function testSecond()
     {
         $this
-            ->given($timestamp = time())
-            ->and($actual = date('s', $timestamp) * 1)
-            ->and($inPast = $actual == 0 ? 59 : $actual - 1)
-            ->and($inFuture = $actual >= 60 ? 0 : $actual + 1)
+            ->given($year = 2006, $month = 5, $day = 4)
+            ->and($hour = 12, $minute = 34, $second = 56)
+
+            ->and($timestamp = mktime($hour, $minute, $second, $month, $day, $year))
+
+            ->and($diff = 1)
+            ->and($actual = (int) date('s', $timestamp))
+            ->and($inPast = (int) date('s', mktime($hour, $minute, $second - $diff, $month, $day, $year)))
+            ->and($inFuture = (int) date('s', mktime($hour, $minute, $second + $diff, $month, $day, $year)))
 
             ->if($this->newTestedInstance('@' . $timestamp))
 
