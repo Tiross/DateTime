@@ -7,6 +7,8 @@
  */
 namespace Tiross\DateTime;
 
+use DateInterval;
+use DateTimeZone;
 
 /**
  * Better dates and times
@@ -58,7 +60,7 @@ class DateTime extends \DateTime
 
         if (is_string($zone)) {
             $zone = new TimeZone($zone);
-        } elseif ($zone instanceof \DateTimeZone) {
+        } elseif ($zone instanceof DateTimeZone) {
             $zone = TimeZone::convert($zone);
         }
 
@@ -324,5 +326,63 @@ class DateTime extends \DateTime
         $this->setTime($hour, $minute, $second);
 
         return $this;
+    }
+
+    public function addDuration(Duration $obj)
+    {
+        if ($obj->isZero()) {
+            return $this;
+        }
+
+        foreach ($obj->toDateIntervalArray() as $interval) {
+            parent::add($interval);
+        }
+
+        return $this;
+    }
+
+    public function subDuration(Duration $obj)
+    {
+        return $this->addDuration($obj->clone()->inverse());
+    }
+
+    public function addInterval(DateInterval $obj)
+    {
+        parent::add($obj);
+
+        return $this;
+    }
+
+    public function subInterval(DateInterval $obj)
+    {
+        parent::sub($obj);
+
+        return $this;
+    }
+
+    public function add($obj)
+    {
+        if ($obj instanceof DateInterval) {
+            return $this->addInterval($obj);
+        }
+
+        if ($obj instanceof Duration) {
+            return $this->addDuration($obj);
+        }
+
+        return $this->addDuration(new Duration($obj));
+    }
+
+    public function sub($obj)
+    {
+        if ($obj instanceof DateInterval) {
+            return $this->subInterval($obj);
+        }
+
+        if ($obj instanceof Duration) {
+            return $this->subDuration($obj);
+        }
+
+        return $this->subDuration(new Duration($obj));
     }
 }

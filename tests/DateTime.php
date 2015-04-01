@@ -4,6 +4,8 @@ namespace Tiross\DateTime\test\unit;
 
 use Tiross\DateTime\DateTime as testedClass;
 use Tiross\DateTime\TimeZone;
+use Tiross\DateTime\Duration;
+use DateInterval;
 
 class DateTime extends \atoum
 {
@@ -434,5 +436,150 @@ class DateTime extends \atoum
             array('01:01:01'),
             array('23:59:59'),
         );
+    }
+
+    /** @dataProvider durationProvider */
+    public function testAddDuration($start, $duration, $end)
+    {
+        $this
+            ->given($dur = new Duration($duration))
+            ->and($expected = $this->newTestedInstance($end))
+            ->if($this->newTestedInstance($start))
+            ->then
+                ->dateTime($this->testedInstance->addDuration($dur))
+                    ->isEqualTo($expected)
+        ;
+    }
+
+    /** @dataProvider intervalProvider */
+    public function testAddInterval($start, $duration, $end)
+    {
+        $this
+            ->given($dur = new DateInterval($duration))
+            ->and($expected = $this->newTestedInstance($end))
+            ->if($this->newTestedInstance($start))
+            ->then
+                ->dateTime($this->testedInstance->addInterval($dur))
+                    ->isEqualTo($expected)
+        ;
+    }
+
+    /** @dataProvider durationProvider */
+    public function testAdd($start, $duration, $end)
+    {
+        $this
+            ->given($dur = new Duration($duration))
+            ->and($interval = null)
+            ->when(function () use ($duration, &$interval) {
+                // DateInterval does not handle every proposed set in provider
+                // so we will skip some test using a Duration object instead
+
+                try {
+                    $interval = new DateInterval($duration);
+                } catch (\Exception $e) {
+                    $interval = new Duration($duration);
+                }
+            })
+
+            ->if($expected = $this->newTestedInstance($end))
+
+            ->then
+                ->assert('doing math with Duration')
+                    ->dateTime($this->newTestedInstance($start)->add($dur))
+                        ->isEqualTo($expected)
+
+                ->assert('doing math with DateInterval')
+                    ->dateTime($this->newTestedInstance($start)->add($interval))
+                        ->isEqualTo($expected)
+
+                ->assert('doing math with Duration constructor parameters')
+                    ->dateTime($this->newTestedInstance($start)->add($duration))
+                        ->isEqualTo($expected)
+        ;
+    }
+
+    /** @dataProvider durationProvider */
+    public function testSubDuration($end, $duration, $start)
+    {
+        $this
+            ->given($dur = new Duration($duration))
+            ->and($expected = $this->newTestedInstance($end))
+            ->if($this->newTestedInstance($start))
+            ->then
+                ->dateTime($this->testedInstance->subDuration($dur))
+                    ->isEqualTo($expected)
+        ;
+    }
+
+    /** @dataProvider intervalProvider */
+    public function testSubInterval($end, $duration, $start)
+    {
+        $this
+            ->given($dur = new DateInterval($duration))
+            ->and($expected = $this->newTestedInstance($end))
+            ->if($this->newTestedInstance($start))
+            ->then
+                ->dateTime($this->testedInstance->subInterval($dur))
+                    ->isEqualTo($expected)
+        ;
+    }
+
+    /** @dataProvider durationProvider */
+    public function testSub($end, $duration, $start)
+    {
+        $this
+            ->given($dur = new Duration($duration))
+            ->and($interval = null)
+            ->when(function () use ($duration, &$interval) {
+                // DateInterval does not handle every proposed set in provider
+                // so we will skip some test using a Duration object instead
+
+                try {
+                    $interval = new DateInterval($duration);
+                } catch (\Exception $e) {
+                    $interval = new Duration($duration);
+                }
+            })
+
+            ->if($expected = $this->newTestedInstance($end))
+
+            ->then
+                ->assert('doing math with Duration')
+                    ->dateTime($this->newTestedInstance($start)->sub($dur))
+                        ->isEqualTo($expected)
+
+                ->assert('doing math with DateInterval')
+                    ->dateTime($this->newTestedInstance($start)->sub($interval))
+                        ->isEqualTo($expected)
+
+                ->assert('doing math with Duration constructor parameters')
+                    ->dateTime($this->newTestedInstance($start)->sub($duration))
+                        ->isEqualTo($expected)
+        ;
+    }
+
+    public function intervalProvider()
+    {
+        // $start, $duration, $end
+        return array(
+            array('2015-01-01T12:34:56Z', 'P1D', '2015-01-02T12:34:56Z'),
+            array('2015-01-01T12:34:56Z', 'P1M', '2015-02-01T12:34:56Z'),
+            array('2015-01-01T12:34:56Z', 'P1Y', '2016-01-01T12:34:56Z'),
+            array('2015-01-01T12:34:56Z', 'PT4S', '2015-01-01T12:35:00Z'),
+            array('2015-01-01T12:34:56Z', 'P0D', '2015-01-01T12:34:56Z'),
+            array('2015-01-01T12:34:56Z', 'P1DT5M4S', '2015-01-02T12:40:00Z'),
+        );
+    }
+
+    public function durationProvider()
+    {
+        // $start, $duration, $end
+
+        $array = $this->intervalProvider();
+
+        $array[] = array('2015-01-10T12:34:56Z', array('weeks' => 7, 'days' => -1), '2015-01-16T12:34:56Z');
+        $array[] = array('2015-01-02T12:34:56Z', array('days' => -1), '2015-01-01T12:34:56Z');
+
+        return $array;
     }
 }
