@@ -385,4 +385,14 @@ class DateTime extends \DateTime
 
         return $this->subDuration(new Duration($obj));
     }
+
+    public function diff($obj, $absolute = false)
+    {
+        if ($obj instanceof \DateTime) {
+            return Duration::fromDateInterval(parent::diff($obj, $absolute));
+        }
+
+        $message = 'First argument must be an instance of \DateTime, instance of %s given';
+        throw new Exception\LogicException($this->printf($message, get_class($obj)), 106);
+    }
 }

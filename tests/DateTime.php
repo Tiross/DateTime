@@ -443,7 +443,7 @@ class DateTime extends \atoum
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($expected = $this->newTestedInstance($end))
+            ->and($expected = $this->newTestedInstance($end)->clone())
             ->if($this->newTestedInstance($start))
             ->then
                 ->dateTime($this->testedInstance->addDuration($dur))
@@ -456,7 +456,7 @@ class DateTime extends \atoum
     {
         $this
             ->given($dur = new DateInterval($duration))
-            ->and($expected = $this->newTestedInstance($end))
+            ->and($expected = $this->newTestedInstance($end)->clone())
             ->if($this->newTestedInstance($start))
             ->then
                 ->dateTime($this->testedInstance->addInterval($dur))
@@ -481,7 +481,7 @@ class DateTime extends \atoum
                 }
             })
 
-            ->if($expected = $this->newTestedInstance($end))
+            ->if($expected = $this->newTestedInstance($end)->clone())
 
             ->then
                 ->assert('doing math with Duration')
@@ -503,10 +503,10 @@ class DateTime extends \atoum
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($expected = $this->newTestedInstance($end))
+            ->and($expected = $this->newTestedInstance($end)->clone())
             ->if($this->newTestedInstance($start))
             ->then
-                ->dateTime($this->testedInstance->subDuration($dur))
+                ->dateTime($a = $this->testedInstance->subDuration($dur))
                     ->isEqualTo($expected)
         ;
     }
@@ -516,7 +516,7 @@ class DateTime extends \atoum
     {
         $this
             ->given($dur = new DateInterval($duration))
-            ->and($expected = $this->newTestedInstance($end))
+            ->and($expected = $this->newTestedInstance($end)->clone())
             ->if($this->newTestedInstance($start))
             ->then
                 ->dateTime($this->testedInstance->subInterval($dur))
@@ -541,7 +541,7 @@ class DateTime extends \atoum
                 }
             })
 
-            ->if($expected = $this->newTestedInstance($end))
+            ->if($expected = $this->newTestedInstance($end)->clone())
 
             ->then
                 ->assert('doing math with Duration')
@@ -577,9 +577,46 @@ class DateTime extends \atoum
 
         $array = $this->intervalProvider();
 
-        $array[] = array('2015-01-10T12:34:56Z', array('weeks' => 7, 'days' => -1), '2015-01-16T12:34:56Z');
+        $array[] = array('2015-01-10T12:34:56Z', array('weeks' => 1, 'days' => -1), '2015-01-16T12:34:56Z');
         $array[] = array('2015-01-02T12:34:56Z', array('days' => -1), '2015-01-01T12:34:56Z');
 
         return $array;
+    }
+
+    /** @dataProvider durationProvider */
+    public function testDiff($start, $duration, $end)
+    {
+        $this
+            ->given($a = $this->newTestedInstance($start))
+            ->and($result = new Duration($duration))
+
+            ->if($b = $this->newTestedInstance($end))
+            ->then
+                ->object($a->diff($b))
+                    ->isInstanceOf('\Tiross\DateTime\Duration')
+                    ->isEqualTo($result)
+
+                ->object($b->diff($a))
+                    ->isEqualTo($result->clone()->inverse())
+
+                ->object($b->diff($a, true))
+                    ->isEqualTo($result->clone()->absolute())
+
+            ->if($b = new \DateTime($end))
+            ->then
+                ->object($a->diff($b))
+                    ->isInstanceOf('\Tiross\DateTime\Duration')
+                    ->isEqualTo($result)
+
+            ->if($b = new \stdClass)
+            ->and($message = 'First argument must be an instance of \DateTime, instance of %s given')
+            ->then
+                ->exception(function () use ($a, $b) {
+                    $a->diff($b);
+                })
+                    ->isInstanceOf('\Tiross\DateTime\Exception\LogicException')
+                    ->hasCode(106)
+                    ->hasMessage(sprintf($message, get_class($b)))
+        ;
     }
 }
