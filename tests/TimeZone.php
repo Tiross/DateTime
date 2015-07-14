@@ -20,7 +20,7 @@ class TimeZone extends \atoum
     public function test__construct($tz)
     {
         $this
-            ->if($errorTZ = $tz . '/Error')
+            ->if($errorTZ = 'Error/' . $tz)
 
             ->assert($tz)
                 ->object($this->newTestedInstance($tz))
@@ -29,7 +29,7 @@ class TimeZone extends \atoum
 
             ->assert('Bad timezone raises exceptions / ' . $errorTZ)
                 ->exception(function () use ($errorTZ) {
-                    new testedClass($errorTZ);
+                    $this->newTestedInstance($errorTZ);
                 })
                     ->isInstanceOf('\Tiross\DateTime\Exception\InvalidTimeZoneException')
                     ->hasCode(201)
