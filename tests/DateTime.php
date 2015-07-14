@@ -65,13 +65,13 @@ class DateTime extends \atoum
                             ->hasDateAndTime($year, $month, $day, $hour, $minute, $second)
                             ->hasTimezone(new TimeZone($zoneTokyo))
 
-                ->assert('New instance from array with only date with timezone')
+                ->assert('New instance from array with only date and DateTimeZone as parameter')
                     ->dateTime($this->newTestedInstance($date, new \DateTimeZone($zoneNY)))
                         ->hasDate($year, $month, $day)
                         ->hasTime(0, 0, 0)
                         ->hasTimezone(new TimeZone($zoneNY))
 
-                ->assert('New instance from string, timezone is set in string')
+                ->assert('New instance from string, timezone set in it')
                     ->dateTime($this->newTestedInstance($string . $zoneOffset, $zoneNY))
                         ->hasDateAndTime($year, $month, $day, $hour, $minute, $second)
                         ->hasTimezone(new TimeZone($zoneOffset))
