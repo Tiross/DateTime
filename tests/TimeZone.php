@@ -182,6 +182,15 @@ class TimeZone extends \atoum
         );
     }
 
+    public function offsetProvider()
+    {
+        return array(
+            '+03:00',
+            '-01:00',
+            sprintf('%+03d:00', rand(-10, 10)),
+        );
+    }
+
     public function getProvider()
     {
         return array(
