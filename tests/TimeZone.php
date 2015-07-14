@@ -182,6 +182,26 @@ class TimeZone extends \atoum
         );
     }
 
+    public function timezoneProvider()
+    {
+        return array(
+            'UTC',
+            'America/Dominica',
+            'America/Montreal',
+            'Asia/Calcutta',
+            'Asia/Singapore',
+            'Australia/Adelaide',
+            'Australia/NSW',
+            'Australia/Melbourne',
+            'Australia/Queensland',
+            'Australia/Victoria',
+            'Europe/Lisbon',
+            'Europe/Paris',
+            'Europe/Prague',
+            'Europe/Rome',
+        );
+    }
+
     public function offsetProvider()
     {
         return array(
