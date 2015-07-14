@@ -463,22 +463,12 @@ class DateTime extends \atoum
         ;
     }
 
-    /** @dataProvider durationProvider */
+    /** @dataProvider intervalProvider */
     public function testAdd($start, $duration, $end)
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($interval = null)
-            ->when(function () use ($duration, &$interval) {
-                // DateInterval does not handle every proposed set in provider
-                // so we will skip some test using a Duration object instead
-
-                try {
-                    $interval = new DateInterval($duration);
-                } catch (\Exception $e) {
-                    $interval = new Duration($duration);
-                }
-            })
+            ->and($interval = new DateInterval($duration))
 
             ->if($expected = $this->newTestedInstance($end)->clone())
 
@@ -523,22 +513,12 @@ class DateTime extends \atoum
         ;
     }
 
-    /** @dataProvider durationProvider */
+    /** @dataProvider intervalProvider */
     public function testSub($end, $duration, $start)
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($interval = null)
-            ->when(function () use ($duration, &$interval) {
-                // DateInterval does not handle every proposed set in provider
-                // so we will skip some test using a Duration object instead
-
-                try {
-                    $interval = new DateInterval($duration);
-                } catch (\Exception $e) {
-                    $interval = new Duration($duration);
-                }
-            })
+            ->and($interval = new DateInterval($duration))
 
             ->if($expected = $this->newTestedInstance($end)->clone())
 
