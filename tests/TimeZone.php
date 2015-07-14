@@ -20,12 +20,14 @@ class TimeZone extends \atoum
     public function test__construct($tz)
     {
         $this
-            ->object($this->newTestedInstance($tz))
-                ->isInstanceOf('\Tiross\DateTime\TimeZone')
-                ->isNotCallable
+            ->if($errorTZ = 'Error/' . $tz)
 
-            ->if($errorTZ = $tz . '/Error')
-            ->then
+            ->assert($tz)
+                ->object($this->newTestedInstance($tz))
+                    ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                    ->isNotCallable
+
+            ->assert('Bad timezone raises exceptions / ' . $errorTZ)
                 ->exception(function () use ($errorTZ) {
                     new testedClass($errorTZ);
                 })
@@ -36,7 +38,7 @@ class TimeZone extends \atoum
     }
 
     /**
-     * @dataProvider constructProvider
+     * @dataProvider timezoneProvider
      */
     public function testConvert($tz)
     {
@@ -52,7 +54,7 @@ class TimeZone extends \atoum
     }
 
     /**
-     * @dataProvider constructProvider
+     * @dataProvider timezoneProvider
      */
     public function testCastToString($tz)
     {
@@ -164,6 +166,11 @@ class TimeZone extends \atoum
 
     public function constructProvider()
     {
+        return array_merge($this->timezoneProvider(), $this->offsetProvider());
+    }
+
+    public function timezoneProvider()
+    {
         return array(
             'UTC',
             'America/Dominica',
@@ -179,6 +186,15 @@ class TimeZone extends \atoum
             'Europe/Paris',
             'Europe/Prague',
             'Europe/Rome',
+        );
+    }
+
+    public function offsetProvider()
+    {
+        return array(
+            '+03:00',
+            '-01:00',
+            sprintf('%+03d:00', rand(-10, 10)),
         );
     }
 

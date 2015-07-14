@@ -25,8 +25,8 @@
     "phpdocumentor/phpdocumentor": "dev-master",
     "satooshi/php-coveralls": "dev-master",
     "scrutinizer/ocular": "dev-master"
-    },
-    "suggest": {
-      "ext-timezonedb": "Timezone Database to be used with PHP's date and time functions"
-    }
+  },
+  "suggest": {
+    "ext-timezonedb": "Timezone Database to be used with PHP's date and time functions"
+  }
 }

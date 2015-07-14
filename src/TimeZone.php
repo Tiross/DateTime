@@ -31,8 +31,25 @@ class TimeZone extends \DateTimeZone
      */
     public function __construct($timezone)
     {
+        $tz = $timezone;
+
+        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            $regex = '`^([+-])?(\d){1,2}:?(\d){2}$`';
+            $match = array();
+
+            if (preg_match($regex, $timezone, $match)) {
+                $seconds = $match[2] * 3600 + $match[3] * 60;
+
+                if ('-' === $match[1]) {
+                    $seconds *= -1;
+                }
+
+                $tz = timezone_name_from_abbr('', $seconds, false);
+            }
+        }
+
         try {
-            parent::__construct($timezone);
+            parent::__construct($tz);
         } catch (\Exception $e) {
             $message = sprintf('The timezone "%s" is not recognised as a valid timezone', $timezone);
             throw new Exception\InvalidTimeZoneException($message, 201, $e);

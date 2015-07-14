@@ -65,7 +65,7 @@ class DateTime extends \atoum
                             ->hasDateAndTime($year, $month, $day, $hour, $minute, $second)
                             ->hasTimezone(new TimeZone($zoneTokyo))
 
-                ->assert('New instance from array with only date with timezone')
+                ->assert('New instance from array with only date and DateTimeZone as parameter')
                     ->dateTime($this->newTestedInstance($date, new \DateTimeZone($zoneNY)))
                         ->hasDate($year, $month, $day)
                         ->hasTime(0, 0, 0)
@@ -88,7 +88,6 @@ class DateTime extends \atoum
             ->and($zoneNY = 'America/New_York')
             ->and($zoneTokyo = 'Asia/Tokyo')
             ->and($zoneOffset = sprintf('%+03d:00', rand(-10, 10)))
-
             ->and($date = compact('year', 'month', 'day'))
             ->and($time = compact('hour', 'minute', 'second'))
             ->and($datetime = array_merge($date, $time))
@@ -157,7 +156,7 @@ class DateTime extends \atoum
     public function testNow()
     {
         $this
-            ->if($dt = new \DateTime)
+            ->if($dt = new testedClass)
             ->then
                 ->dateTime(testedClass::now())
                     ->isEqualTo($dt)
@@ -464,22 +463,12 @@ class DateTime extends \atoum
         ;
     }
 
-    /** @dataProvider durationProvider */
+    /** @dataProvider intervalProvider */
     public function testAdd($start, $duration, $end)
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($interval = null)
-            ->when(function () use ($duration, &$interval) {
-                // DateInterval does not handle every proposed set in provider
-                // so we will skip some test using a Duration object instead
-
-                try {
-                    $interval = new DateInterval($duration);
-                } catch (\Exception $e) {
-                    $interval = new Duration($duration);
-                }
-            })
+            ->and($interval = new DateInterval($duration))
 
             ->if($expected = $this->newTestedInstance($end)->clone())
 
@@ -524,22 +513,12 @@ class DateTime extends \atoum
         ;
     }
 
-    /** @dataProvider durationProvider */
+    /** @dataProvider intervalProvider */
     public function testSub($end, $duration, $start)
     {
         $this
             ->given($dur = new Duration($duration))
-            ->and($interval = null)
-            ->when(function () use ($duration, &$interval) {
-                // DateInterval does not handle every proposed set in provider
-                // so we will skip some test using a Duration object instead
-
-                try {
-                    $interval = new DateInterval($duration);
-                } catch (\Exception $e) {
-                    $interval = new Duration($duration);
-                }
-            })
+            ->and($interval = new DateInterval($duration))
 
             ->if($expected = $this->newTestedInstance($end)->clone())
 
