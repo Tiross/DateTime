@@ -157,7 +157,7 @@ class DateTime extends \atoum
     public function testNow()
     {
         $this
-            ->if($dt = new \DateTime)
+            ->if($dt = new testedClass)
             ->then
                 ->dateTime(testedClass::now())
                     ->isEqualTo($dt)
