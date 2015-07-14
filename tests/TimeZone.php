@@ -20,12 +20,14 @@ class TimeZone extends \atoum
     public function test__construct($tz)
     {
         $this
+            ->if($errorTZ = $tz . '/Error')
+
+            ->assert($tz)
             ->object($this->newTestedInstance($tz))
                 ->isInstanceOf('\Tiross\DateTime\TimeZone')
                 ->isNotCallable
 
-            ->if($errorTZ = $tz . '/Error')
-            ->then
+            ->assert('Bad timezone raises exceptions / ' . $errorTZ)
                 ->exception(function () use ($errorTZ) {
                     new testedClass($errorTZ);
                 })
