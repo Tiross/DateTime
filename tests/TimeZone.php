@@ -23,9 +23,9 @@ class TimeZone extends \atoum
             ->if($errorTZ = $tz . '/Error')
 
             ->assert($tz)
-            ->object($this->newTestedInstance($tz))
-                ->isInstanceOf('\Tiross\DateTime\TimeZone')
-                ->isNotCallable
+                ->object($this->newTestedInstance($tz))
+                    ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                    ->isNotCallable
 
             ->assert('Bad timezone raises exceptions / ' . $errorTZ)
                 ->exception(function () use ($errorTZ) {
@@ -38,7 +38,7 @@ class TimeZone extends \atoum
     }
 
     /**
-     * @dataProvider constructProvider
+     * @dataProvider timezoneProvider
      */
     public function testConvert($tz)
     {
@@ -54,7 +54,7 @@ class TimeZone extends \atoum
     }
 
     /**
-     * @dataProvider constructProvider
+     * @dataProvider timezoneProvider
      */
     public function testCastToString($tz)
     {
