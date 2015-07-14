@@ -164,22 +164,7 @@ class TimeZone extends \atoum
 
     public function constructProvider()
     {
-        return array(
-            'UTC',
-            'America/Dominica',
-            'America/Montreal',
-            'Asia/Calcutta',
-            'Asia/Singapore',
-            'Australia/Adelaide',
-            'Australia/NSW',
-            'Australia/Melbourne',
-            'Australia/Queensland',
-            'Australia/Victoria',
-            'Europe/Lisbon',
-            'Europe/Paris',
-            'Europe/Prague',
-            'Europe/Rome',
-        );
+        return array_merge($this->timezoneProvider(), $this->offsetProvider());
     }
 
     public function timezoneProvider()
