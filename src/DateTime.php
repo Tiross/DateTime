@@ -93,6 +93,7 @@ class DateTime extends \DateTime
         switch (strtolower($property)) {
             case 'clone':
             case 'gettimezone':
+            case 'getoffset':
 
             case 'year':
             case 'month':
