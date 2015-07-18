@@ -599,6 +599,60 @@ class DateTime extends \atoum
         ;
     }
 
+    /** @dataProvider timezoneProvider */
+    public function testGetTimezone($timezone)
+    {
+        $this
+            ->assert('With ' . $timezone)
+                ->if($this->newTestedInstance(null, $timezone))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo(new TimeZone($timezone))
+
+                    ->object($this->testedInstance->getTimezone())
+                        ->isEqualTo($this->testedInstance->getTimezone)
+                        ->isEqualTo($this->testedInstance->GETTIMEZONE)
+        ;
+    }
+
+    /** @dataProvider timezoneProvider */
+    public function testGetOffset($timezone)
+    {
+        $this
+            ->if($this->newTestedInstance(null, $timezone))
+            ->then
+                ->assert('Test with ' . $timezone)
+                    ->object($this->testedInstance->getOffset())
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset($this->testedInstance))
+
+                    ->object($this->testedInstance->getOffset())
+                        ->isEqualTo($this->testedInstance->getOffset)
+                        ->isEqualTo($this->testedInstance->GETOFFSET)
+        ;
+    }
+
+    public function timezoneProvider()
+    {
+        return array(
+            'UTC',
+            'America/Dominica',
+            'America/Montreal',
+            'Asia/Calcutta',
+            'Asia/Singapore',
+            'Australia/Adelaide',
+            'Australia/NSW',
+            'Australia/Melbourne',
+            'Australia/Queensland',
+            'Australia/Victoria',
+            'Europe/Lisbon',
+            'Europe/Paris',
+            'Europe/Prague',
+            'Europe/Rome',
+        );
+    }
+
     /** @dataProvider iso8601Provider */
     public function testIso8601($string)
     {
