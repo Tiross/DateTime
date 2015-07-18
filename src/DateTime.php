@@ -211,29 +211,30 @@ class DateTime extends \DateTime
         $tmp = $this->format('Y m d H i s');
         list($Y, $m, $d, $H, $i, $s) = explode(' ', $tmp);
 
+        $method = '';
+        $args = array();
+
         switch ($pattern) {
             case 'Y':
             case 'm':
             case 'd':
-                $arg1 = 'Y';
-                $arg2 = 'm';
-                $arg3 = 'd';
                 $method = 'setDate';
+                $args = array(&$Y, &$m, &$d);
                 break;
+
             case 'H':
             case 'i':
             case 's':
-                $arg1 = 'H';
-                $arg2 = 'i';
-                $arg3 = 's';
                 $method = 'setTime';
+                $args = array(&$H, &$i, &$s);
+                break;
         }
 
         $old = $$pattern;
 
         if (!is_null($value)) {
             $$pattern = $value;
-            $this->$method($$arg1, $$arg2, $$arg3);
+            call_user_func_array(array($this, $method), $args);
         }
 
         return (int) $old;
