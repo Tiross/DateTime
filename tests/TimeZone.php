@@ -194,7 +194,10 @@ class TimeZone extends \atoum
         return array(
             '+03:00',
             '-01:00',
+            '-02:00',
             sprintf('%+03d:00', rand(-10, 10)),
+            '+0300',
+            '-0100',
         );
     }
 
