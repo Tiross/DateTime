@@ -220,7 +220,7 @@ class TimeZone extends \atoum
     public function testGetOffset($timezone)
     {
         $this
-            ->if($this->newTestedInstance($timezone))
+            ->if($obj = $this->newTestedInstance($timezone))
             ->and($date = new DateTime)
             ->then
                 ->object($offset = $this->testedInstance->getOffset($date))
@@ -232,7 +232,7 @@ class TimeZone extends \atoum
                 ->integer($offset->seconds())
                     ->isIdenticalTo(timezone_offset_get(new \DateTimeZone($timezone), new \DateTime))
 
-                ->exception(function () {
+                ->exception(function () use ($obj) {
                     $this->testedInstance->getOffset(uniqid());
                 })
                     ->isInstanceOf('\Tiross\DateTime\Exception\InvalidDateTimeException')
