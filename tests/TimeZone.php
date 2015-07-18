@@ -233,7 +233,7 @@ class TimeZone extends \atoum
                     ->isIdenticalTo(timezone_offset_get(new \DateTimeZone($timezone), new \DateTime))
 
                 ->exception(function () use ($obj) {
-                    $obj->testedInstance->getOffset(uniqid());
+                    $obj->getOffset(uniqid());
                 })
                     ->isInstanceOf('\Tiross\DateTime\Exception\InvalidDateTimeException')
                     ->hasCode(203)
