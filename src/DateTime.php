@@ -396,4 +396,9 @@ class DateTime extends \DateTime
         $message = 'First argument must be an instance of \DateTime, instance of %s given';
         throw new Exception\LogicException($this->printf($message, get_class($obj)), 106);
     }
+
+    public function getOffset()
+    {
+        return $this->getTimezone()->getOffset($this);
+    }
 }
