@@ -212,16 +212,16 @@ class TimeZone extends \DateTimeZone
             1300 => 'Pacific/Midway',
         );
 
-        $o = str_replace(':', '', $offset);
+        $tmp = str_replace(':', '', $offset);
 
-        if (!is_numeric($o)) {
+        if (!is_numeric($tmp)) {
             return null;
         }
 
-        $o += 2400;
+        $tmp += 2400;
 
-        if (array_key_exists($o, $names)) {
-            return $names[ $o ];
+        if (array_key_exists($tmp, $names)) {
+            return $names[ $tmp ];
         }
 
         return false;
