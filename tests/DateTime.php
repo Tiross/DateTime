@@ -625,9 +625,9 @@ class DateTime extends \atoum
                 ->assert('Test with ' . $timezone)
                     ->object($this->testedInstance->getOffset())
                         ->isInstanceOf('\Tiross\DateTime\Duration')
-                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset())
+                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset($this->testedInstance))
 
-                    ->object($this->testedInstance->getTimezone()->getOffset())
+                    ->object($this->testedInstance->getOffset())
                         ->isEqualTo($this->testedInstance->getOffset)
                         ->isEqualTo($this->testedInstance->GETOFFSET)
         ;
