@@ -116,6 +116,18 @@ class TimeZone extends \DateTimeZone
         throw new Exception\LogicException($message, 298);
     }
 
+    public function getOffset($datetime)
+    {
+        if ($datetime instanceof \DateTime) {
+            $obj  = new Duration(array('seconds' => parent::getOffset($datetime)), $datetime);
+
+            return $obj;//->linearize();
+        }
+
+        $message = 'First argument is not a valid date';
+        throw new Exception\InvalidDateTimeException($message, 203);
+    }
+
     /**
      * Gets or sets the default timezone used by all date/time functions in a script
      *

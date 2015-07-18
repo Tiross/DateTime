@@ -3,6 +3,7 @@
 namespace Tiross\DateTime\tests\unit;
 
 use Tiross\DateTime\TimeZone as testedClass;
+use Tiross\DateTime\DateTime;
 
 class TimeZone extends \atoum
 {
@@ -211,5 +212,32 @@ class TimeZone extends \atoum
             'listIdentifiers',
             'GeTlOcAtIoN',
         );
+    }
+
+    /**
+     * @dataProvider timezoneProvider
+     */
+    public function testGetOffset($timezone)
+    {
+        $this
+            ->if($this->newTestedInstance($timezone))
+            ->and($date = new DateTime)
+            ->then
+                ->object($offset = $this->testedInstance->getOffset($date))
+                    ->isInstanceOf('\Tiross\DateTime\Duration')
+
+                ->object($offset->getReferenceDate())
+                    ->isIdenticalTo($date)
+
+                ->integer($offset->seconds())
+                    ->isIdenticalTo(timezone_offset_get(new \DateTimeZone($timezone), new \DateTime))
+
+                ->exception(function () {
+                    $this->testedInstance->getOffset(uniqid());
+                })
+                    ->isInstanceOf('\Tiross\DateTime\Exception\InvalidDateTimeException')
+                    ->hasCode(203)
+                    ->hasMessage('First argument is not a valid date')
+        ;
     }
 }
