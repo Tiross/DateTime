@@ -93,6 +93,7 @@ class DateTime extends \DateTime
         switch (strtolower($property)) {
             case 'clone':
             case 'gettimezone':
+            case 'getoffset':
 
             case 'year':
             case 'month':
@@ -401,5 +402,10 @@ class DateTime extends \DateTime
     public function getTimezone()
     {
         return TimeZone::convert(parent::getTimezone());
+    }
+
+    public function getOffset()
+    {
+        return $this->getTimezone()->getOffset($this);
     }
 }

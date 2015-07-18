@@ -616,6 +616,23 @@ class DateTime extends \atoum
         ;
     }
 
+    /** @dataProvider timezoneProvider */
+    public function testGetOffset($timezone)
+    {
+        $this
+            ->if($this->newTestedInstance(null, $timezone))
+            ->then
+                ->assert('Test with ' . $timezone)
+                    ->object($this->testedInstance->getOffset())
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset($this->testedInstance))
+
+                    ->object($this->testedInstance->getOffset())
+                        ->isEqualTo($this->testedInstance->getOffset)
+                        ->isEqualTo($this->testedInstance->GETOFFSET)
+        ;
+    }
+
     public function timezoneProvider()
     {
         return array(
