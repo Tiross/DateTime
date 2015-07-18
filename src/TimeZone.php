@@ -34,17 +34,8 @@ class TimeZone extends \DateTimeZone
         $tz = $timezone;
 
         if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            $regex = '`^([+-])?(\d){1,2}:?(\d){2}$`';
-            $match = array();
-
-            if (preg_match($regex, $timezone, $match)) {
-                $seconds = $match[2] * 3600 + $match[3] * 60;
-
-                if ('-' === $match[1]) {
-                    $seconds *= -1;
-                }
-
-                $tz = timezone_name_from_abbr('', $seconds, false);
+            if ($tmp = $this->nameFromOffset($tz)) {
+                $tz = $tmp;
             }
         }
 
@@ -167,5 +158,60 @@ class TimeZone extends \DateTimeZone
     public static function version()
     {
         return timezone_version_get();
+    }
+
+    protected function nameFromOffset($offset)
+    {
+        $names = array(
+            2400 => 'UTC',
+            2500 => 'Africa/Lagos',
+            2600 => 'Africa/Cairo',
+            2700 => 'Antarctica/Syowa',
+            2800 => 'Asia/Dubai',
+            2830 => 'Asia/Kabul',
+            2900 => 'Antarctica/Mawson',
+            2930 => 'Asia/Colombo',
+            2945 => 'Asia/Kathmandu',
+            3000 => 'Antarctica/Vostok',
+            3030 => 'Asia/Rangoon',
+            3100 => 'Indian/Christmas',
+            3200 => 'Asia/Singapore',
+            3245 => 'Australia/Eucla',
+            3300 => 'Asia/Seoul',
+            3330 => 'Australia/Darwin',
+            3400 => 'Pacific/Chuuk',
+            3500 => 'Pacific/Noumea',
+            3530 => 'Pacific/Norfolk',
+            3600 => 'Pacific/Wake',
+            3700 => 'Pacific/Tongatapu',
+            3800 => 'Pacific/Kiritimati',
+            2300 => 'Atlantic/Cape_Verde',
+            2200 => 'America/Noronha',
+            2100 => 'America/Cayenne',
+            2000 => 'America/Curacao',
+            2030 => 'America/Caracas',
+            1900 => 'America/Panama',
+            1800 => 'Pacific/Galapagos',
+            1700 => 'America/Phoenix',
+            1600 => 'Pacific/Pitcairn',
+            1500 => 'Pacific/Gambier',
+            1530 => 'Pacific/Marquesas',
+            1400 => 'Pacific/Honolulu',
+            1300 => 'Pacific/Midway',
+        );
+
+        $o = str_replace(':', '', $offset);
+
+        if (!is_numeric($o)) {
+            return null;
+        }
+
+        $o += 2400;
+
+        if (array_key_exists($o, $names)) {
+            return $names[ $o ];
+        }
+
+        return false;
     }
 }
