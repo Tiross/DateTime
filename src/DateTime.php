@@ -287,6 +287,18 @@ class DateTime extends \DateTime
         return vsprintf($pattern, $params);
     }
 
+    public function iso8601()
+    {
+        $datetime = $this->ymd() . 'T' . $this->hms();
+        $offset   = $this->getOffset();
+
+        if ($offset->isZero()) {
+            return $datetime . 'Z';
+        }
+
+        return $datetime;
+    }
+
     public function truncateTo($what)
     {
         $year   = $this->year();
