@@ -598,4 +598,41 @@ class DateTime extends \atoum
                     ->hasMessage(sprintf($message, get_class($b)))
         ;
     }
+
+    /** @dataProvider timezoneProvider */
+    public function testGetTimezone($timezone)
+    {
+        $this
+            ->assert('With ' . $timezone)
+                ->if($this->newTestedInstance(null, $timezone))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo(new TimeZone($timezone))
+
+                    ->object($this->testedInstance->getTimezone())
+                        ->isEqualTo($this->testedInstance->getTimezone)
+                        ->isEqualTo($this->testedInstance->GETTIMEZONE)
+        ;
+    }
+
+    public function timezoneProvider()
+    {
+        return array(
+            'UTC',
+            'America/Dominica',
+            'America/Montreal',
+            'Asia/Calcutta',
+            'Asia/Singapore',
+            'Australia/Adelaide',
+            'Australia/NSW',
+            'Australia/Melbourne',
+            'Australia/Queensland',
+            'Australia/Victoria',
+            'Europe/Lisbon',
+            'Europe/Paris',
+            'Europe/Prague',
+            'Europe/Rome',
+        );
+    }
 }
