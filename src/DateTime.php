@@ -92,6 +92,7 @@ class DateTime extends \DateTime
     {
         switch (strtolower($property)) {
             case 'clone':
+            case 'gettimezone':
 
             case 'year':
             case 'month':
@@ -395,6 +396,11 @@ class DateTime extends \DateTime
 
         $message = 'First argument must be an instance of \DateTime, instance of %s given';
         throw new Exception\LogicException($this->printf($message, get_class($obj)), 106);
+    }
+
+    public function getTimezone()
+    {
+        return TimeZone::convert(parent::getTimezone());
     }
 
     public function getOffset()
