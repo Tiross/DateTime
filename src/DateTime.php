@@ -293,13 +293,16 @@ class DateTime extends \DateTime
     public function iso8601()
     {
         $datetime = $this->ymd() . 'T' . $this->hms();
-        $offset   = $this->getOffset();
+        $offset   = $this->getOffset()->linearize();
+
+        $timezone = $offset->isPositive() ? '+' : '-';
+        $timezone .= vsprintf('%02d:%02d', $offset->clone->absolute->inUnits('hours', 'minutes'));
 
         if ($offset->isZero()) {
-            return $datetime . 'Z';
+            $timezone = 'Z';
         }
 
-        return $datetime;
+        return $datetime . $timezone;
     }
 
     public function truncateTo($what)
