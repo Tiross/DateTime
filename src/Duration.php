@@ -12,16 +12,16 @@ namespace Tiross\DateTime;
  *
  * @author Tiross
  *
- * @method self clone Return a clone of current instance
- * @method integer years Return years (act like `$obj->inUnits('years');`)
- * @method integer months Return months (act like `$obj->inUnits('months');`)
- * @method integer weeks Return weeks (act like `$obj->inUnits('weeks');`)
- * @method integer days Return days (act like `$obj->inUnits('days');`)
- * @method integer hours Return hours (act like `$obj->inUnits('hours');`)
- * @method integer minutes Return minutes (act like `$obj->inUnits('minutes');`)
- * @method integer seconds Return seconds (act like `$obj->inUnits('seconds');`)
- * @method self sub Alias for `Duration::subtract()`
- * @method string toString Return a string representation of current duration
+ * @method self clone() Return a clone of current instance
+ * @method integer years() Return years (act like `$obj->inUnits('years');`)
+ * @method integer months() Return months (act like `$obj->inUnits('months');`)
+ * @method integer weeks() Return weeks (act like `$obj->inUnits('weeks');`)
+ * @method integer days() Return days (act like `$obj->inUnits('days');`)
+ * @method integer hours() Return hours (act like `$obj->inUnits('hours');`)
+ * @method integer minutes() Return minutes (act like `$obj->inUnits('minutes');`)
+ * @method integer seconds() Return seconds (act like `$obj->inUnits('seconds');`)
+ * @method self sub() Alias for `Duration::subtract()`
+ * @method string toString() Return a string representation of current duration
  *
  * @property self clone Return a clone of current instance
  * @property integer years Return years (act like `$obj->inUnits('years');`)
