@@ -1017,7 +1017,8 @@ class Duration extends \atoum
                         ->isIdenticalTo('PT3600S')
 
                     ->object($this->testedInstance->linearize())
-                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
 
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT1H')
@@ -1030,7 +1031,8 @@ class Duration extends \atoum
                         ->isIdenticalTo('PT3600S')
 
                     ->object($this->testedInstance->linearize)
-                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
 
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT1H')
@@ -1043,7 +1045,8 @@ class Duration extends \atoum
                         ->isIdenticalTo('PT3600S')
 
                     ->object($this->testedInstance->LiNeArIzE)
-                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
 
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT1H')
