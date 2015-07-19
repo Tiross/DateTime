@@ -92,6 +92,8 @@ class DateTime extends \DateTime
     {
         switch (strtolower($property)) {
             case 'clone':
+            case 'gettimezone':
+            case 'getoffset':
 
             case 'year':
             case 'month':
@@ -103,6 +105,7 @@ class DateTime extends \DateTime
             case 'ymd':
             case 'dmy':
             case 'hms':
+            case 'iso8601':
                 return $this->$property();
         }
 
@@ -211,29 +214,30 @@ class DateTime extends \DateTime
         $tmp = $this->format('Y m d H i s');
         list($Y, $m, $d, $H, $i, $s) = explode(' ', $tmp);
 
+        $method = '';
+        $args = array();
+
         switch ($pattern) {
             case 'Y':
             case 'm':
             case 'd':
-                $arg1 = 'Y';
-                $arg2 = 'm';
-                $arg3 = 'd';
                 $method = 'setDate';
+                $args = array(&$Y, &$m, &$d);
                 break;
+
             case 'H':
             case 'i':
             case 's':
-                $arg1 = 'H';
-                $arg2 = 'i';
-                $arg3 = 's';
                 $method = 'setTime';
+                $args = array(&$H, &$i, &$s);
+                break;
         }
 
         $old = $$pattern;
 
         if (!is_null($value)) {
             $$pattern = $value;
-            $this->$method($$arg1, $$arg2, $$arg3);
+            call_user_func_array(array($this, $method), $args);
         }
 
         return (int) $old;
@@ -284,6 +288,21 @@ class DateTime extends \DateTime
     protected function printf($pattern, $params)
     {
         return vsprintf($pattern, $params);
+    }
+
+    public function iso8601()
+    {
+        $datetime = $this->ymd() . 'T' . $this->hms();
+        $offset   = $this->getOffset()->linearize();
+
+        $timezone = $offset->isPositive() ? '+' : '-';
+        $timezone .= vsprintf('%02d:%02d', $offset->clone->absolute->inUnits('hours', 'minutes'));
+
+        if ($offset->isZero()) {
+            $timezone = 'Z';
+        }
+
+        return $datetime . $timezone;
     }
 
     public function truncateTo($what)
@@ -394,5 +413,15 @@ class DateTime extends \DateTime
 
         $message = 'First argument must be an instance of \DateTime, instance of %s given';
         throw new Exception\LogicException($this->printf($message, get_class($obj)), 106);
+    }
+
+    public function getTimezone()
+    {
+        return TimeZone::convert(parent::getTimezone());
+    }
+
+    public function getOffset()
+    {
+        return $this->getTimezone()->getOffset($this);
     }
 }

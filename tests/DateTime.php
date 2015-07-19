@@ -598,4 +598,85 @@ class DateTime extends \atoum
                     ->hasMessage(sprintf($message, get_class($b)))
         ;
     }
+
+    /** @dataProvider timezoneProvider */
+    public function testGetTimezone($timezone)
+    {
+        $this
+            ->assert('With ' . $timezone)
+                ->if($this->newTestedInstance(null, $timezone))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo(new TimeZone($timezone))
+
+                    ->object($this->testedInstance->getTimezone())
+                        ->isEqualTo($this->testedInstance->getTimezone)
+                        ->isEqualTo($this->testedInstance->GETTIMEZONE)
+        ;
+    }
+
+    /** @dataProvider timezoneProvider */
+    public function testGetOffset($timezone)
+    {
+        $this
+            ->if($this->newTestedInstance(null, $timezone))
+            ->then
+                ->assert('Test with ' . $timezone)
+                    ->object($this->testedInstance->getOffset())
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset($this->testedInstance))
+
+                    ->object($this->testedInstance->getOffset())
+                        ->isEqualTo($this->testedInstance->getOffset)
+                        ->isEqualTo($this->testedInstance->GETOFFSET)
+        ;
+    }
+
+    public function timezoneProvider()
+    {
+        return array(
+            'UTC',
+            'America/Dominica',
+            'America/Montreal',
+            'Asia/Calcutta',
+            'Asia/Singapore',
+            'Australia/Adelaide',
+            'Australia/NSW',
+            'Australia/Melbourne',
+            'Australia/Queensland',
+            'Australia/Victoria',
+            'Europe/Lisbon',
+            'Europe/Paris',
+            'Europe/Prague',
+            'Europe/Rome',
+        );
+    }
+
+    /** @dataProvider iso8601Provider */
+    public function testIso8601($string)
+    {
+        $this
+            ->if($this->newTestedInstance($string))
+            ->then
+                ->string($this->testedInstance->iso8601())
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->iso8601)
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->ISO8601)
+                    ->isIdenticalTo($string)
+        ;
+    }
+
+    public function iso8601Provider()
+    {
+        return array(
+            '2015-01-01T00:00:12Z',
+            '2003-01-22T23:43:12Z',
+            '2032-10-29T12:37:16+01:00',
+            '2022-10-29T12:37:16-09:30',
+        );
+    }
 }
