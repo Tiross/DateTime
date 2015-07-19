@@ -1016,11 +1016,11 @@ class Duration extends \atoum
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT3600S')
 
-                    ->object($this->testedInstance->linearize())
+                    ->object($obj = $this->testedInstance->linearize())
                         ->isInstanceOfTestedClass
                         ->isNotTestedInstance
 
-                    ->castToString($this->testedInstance)
+                    ->castToString($obj)
                         ->isIdenticalTo('PT1H')
 
             ->assert('Tiross\DataTime\Duration::$linearize')
@@ -1030,11 +1030,11 @@ class Duration extends \atoum
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT3600S')
 
-                    ->object($this->testedInstance->linearize)
+                    ->object($obj = $this->testedInstance->linearize)
                         ->isInstanceOfTestedClass
                         ->isNotTestedInstance
 
-                    ->castToString($this->testedInstance)
+                    ->castToString($obj)
                         ->isIdenticalTo('PT1H')
 
             ->assert('Tiross\DataTime\Duration::$LiNeArIzE')
@@ -1044,11 +1044,11 @@ class Duration extends \atoum
                     ->castToString($this->testedInstance)
                         ->isIdenticalTo('PT3600S')
 
-                    ->object($this->testedInstance->LiNeArIzE)
+                    ->object($obj = $this->testedInstance->LiNeArIzE)
                         ->isInstanceOfTestedClass
                         ->isNotTestedInstance
 
-                    ->castToString($this->testedInstance)
+                    ->castToString($obj)
                         ->isIdenticalTo('PT1H')
         ;
     }
