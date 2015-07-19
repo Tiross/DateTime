@@ -186,8 +186,6 @@ class TimeZone extends \atoum
             'Europe/Paris',
             'Europe/Prague',
             'Europe/Rome',
-            'Z',
-            'Zulu',
         );
     }
 
@@ -200,6 +198,8 @@ class TimeZone extends \atoum
             sprintf('%+03d:00', rand(-10, 10)),
             '+0300',
             '-0100',
+            'Z',
+            'Zulu',
         );
     }
 
