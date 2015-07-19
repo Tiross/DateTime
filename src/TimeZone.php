@@ -202,6 +202,10 @@ class TimeZone extends \DateTimeZone
 
         $o = str_replace(':', '', $offset);
 
+        if (in_array(strtolower($o), array('z', 'zulu'))) {
+            $o = 0;
+        }
+
         if (!is_numeric($o)) {
             return null;
         }
