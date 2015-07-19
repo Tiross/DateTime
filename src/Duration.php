@@ -649,6 +649,19 @@ class Duration
         return $this->subtractDuration(new static($args));
     }
 
+    public function linearize()
+    {
+        $date = $this->getReferenceDate();
+
+        if (!$date instanceof DateTime) {
+            $date = new DateTime;
+        }
+
+        $a = $date->clone;
+        $b = $date->clone->add($this);
+
+        return $a->diff($b);
+    }
 
     /**
      * Returns a new object with the same calendar delta (months and days only) as the current object.
