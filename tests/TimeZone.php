@@ -186,6 +186,8 @@ class TimeZone extends \atoum
             'Europe/Paris',
             'Europe/Prague',
             'Europe/Rome',
+            'Z',
+            'Zulu',
         );
     }
 
