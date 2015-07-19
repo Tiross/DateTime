@@ -199,6 +199,8 @@ class TimeZone extends \atoum
             sprintf('%+03d:00', rand(-10, 10)),
             '+0300',
             '-0100',
+            'Z',
+            'Zulu',
         );
     }
 
