@@ -1005,4 +1005,48 @@ class Duration extends \atoum
                 ->boolean($this->testedInstance->ISINFINITE)->isFalse
         ;
     }
+
+    public function testLinearize()
+    {
+        $this
+            ->assert('Tiross\DataTime\Duration::linearize()')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($this->testedInstance->linearize())
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT1H')
+
+            ->assert('Tiross\DataTime\Duration::$linearize')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($this->testedInstance->linearize)
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT1H')
+
+            ->assert('Tiross\DataTime\Duration::$LiNeArIzE')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($this->testedInstance->LiNeArIzE)
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT1H')
+        ;
+    }
 }
