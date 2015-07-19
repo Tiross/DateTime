@@ -105,6 +105,7 @@ class DateTime extends \DateTime
             case 'ymd':
             case 'dmy':
             case 'hms':
+            case 'iso8601':
                 return $this->$property();
         }
 
