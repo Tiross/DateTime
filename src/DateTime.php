@@ -105,6 +105,7 @@ class DateTime extends \DateTime
             case 'ymd':
             case 'dmy':
             case 'hms':
+            case 'iso8601':
                 return $this->$property();
         }
 
@@ -287,6 +288,21 @@ class DateTime extends \DateTime
     protected function printf($pattern, $params)
     {
         return vsprintf($pattern, $params);
+    }
+
+    public function iso8601()
+    {
+        $datetime = $this->ymd() . 'T' . $this->hms();
+        $offset   = $this->getOffset()->linearize();
+
+        $timezone = $offset->isPositive() ? '+' : '-';
+        $timezone .= vsprintf('%02d:%02d', $offset->clone->absolute->inUnits('hours', 'minutes'));
+
+        if ($offset->isZero()) {
+            $timezone = 'Z';
+        }
+
+        return $datetime . $timezone;
     }
 
     public function truncateTo($what)

@@ -652,4 +652,31 @@ class DateTime extends \atoum
             'Europe/Rome',
         );
     }
+
+    /** @dataProvider iso8601Provider */
+    public function testIso8601($string)
+    {
+        $this
+            ->if($this->newTestedInstance($string))
+            ->then
+                ->string($this->testedInstance->iso8601())
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->iso8601)
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->ISO8601)
+                    ->isIdenticalTo($string)
+        ;
+    }
+
+    public function iso8601Provider()
+    {
+        return array(
+            '2015-01-01T00:00:12Z',
+            '2003-01-22T23:43:12Z',
+            '2032-10-29T12:37:16+01:00',
+            '2022-10-29T12:37:16-08:30',
+        );
+    }
 }
