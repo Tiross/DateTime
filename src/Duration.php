@@ -543,10 +543,10 @@ class Duration
     {
         $factor = (float) $factor;
 
-        $this->months  = intval($this->months * $factor);
-        $this->days    = intval($this->days * $factor);
-        $this->minutes = intval($this->minutes * $factor);
-        $this->seconds = intval($this->seconds * $factor);
+        $this->months  = (float) $this->months * $factor;
+        $this->days    = (float) $this->days * $factor;
+        $this->minutes = (float) $this->minutes * $factor;
+        $this->seconds = (float) $this->seconds * $factor;
 
         return $this;
     }
