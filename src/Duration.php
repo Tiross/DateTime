@@ -271,6 +271,7 @@ class Duration
 
             case 'inverse':
             case 'absolute':
+            case 'linearize':
             case 'getcalendarduration':
             case 'getclockduration':
                 return $this->$property();
