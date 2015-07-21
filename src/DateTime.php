@@ -317,17 +317,17 @@ class DateTime extends \DateTime
         switch (strtolower($what)) {
             case 'year':
             case 'years':
-                $month  = 0;
+                $month = 0;
                 // no break
 
             case 'month':
             case 'months':
-                $day    = 0;
+                $day = 0;
                 // no break
 
             case 'day':
             case 'days':
-                $hour   = 0;
+                $hour = 0;
                 // no break
 
             case 'hour':
