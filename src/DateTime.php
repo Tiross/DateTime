@@ -424,4 +424,18 @@ class DateTime extends \DateTime
     {
         return $this->getTimezone()->getOffset($this);
     }
+
+    public static function compare(DateTime $a, DateTime $b)
+    {
+        $obj1 = $a->clone;
+        $obj2 = $b->clone->setTimezone($obj1->getTimezone());
+
+        $cmp = $obj1->format('U') - $obj2->format('U');
+
+        if ($cmp === 0) {
+            return 0;
+        }
+
+        return $cmp < 0 ? -1 : 1;
+    }
 }
