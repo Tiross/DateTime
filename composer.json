@@ -4,9 +4,9 @@
   "license": "MIT",
   "keywords": ["date","time","timezone","datetime"],
   "authors": [
-      {
-          "name": "Tiross"
-      }
+    {
+      "name": "Tiross"
+    }
   ],
   "repositories": [
     {

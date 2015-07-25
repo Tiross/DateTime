@@ -93,6 +93,7 @@ class DateTime extends \DateTime
         switch (strtolower($property)) {
             case 'clone':
             case 'gettimezone':
+            case 'getoffset':
 
             case 'year':
             case 'month':
@@ -104,6 +105,7 @@ class DateTime extends \DateTime
             case 'ymd':
             case 'dmy':
             case 'hms':
+            case 'iso8601':
                 return $this->$property();
         }
 
@@ -288,6 +290,21 @@ class DateTime extends \DateTime
         return vsprintf($pattern, $params);
     }
 
+    public function iso8601()
+    {
+        $datetime = $this->ymd() . 'T' . $this->hms();
+        $offset   = $this->getOffset()->linearize();
+
+        $timezone = $offset->isPositive() ? '+' : '-';
+        $timezone .= vsprintf('%02d:%02d', $offset->clone->absolute->inUnits('hours', 'minutes'));
+
+        if ($offset->isZero()) {
+            $timezone = 'Z';
+        }
+
+        return $datetime . $timezone;
+    }
+
     public function truncateTo($what)
     {
         $year   = $this->year();
@@ -300,17 +317,17 @@ class DateTime extends \DateTime
         switch (strtolower($what)) {
             case 'year':
             case 'years':
-                $month  = 0;
+                $month = 0;
                 // no break
 
             case 'month':
             case 'months':
-                $day    = 0;
+                $day = 0;
                 // no break
 
             case 'day':
             case 'days':
-                $hour   = 0;
+                $hour = 0;
                 // no break
 
             case 'hour':
@@ -401,5 +418,24 @@ class DateTime extends \DateTime
     public function getTimezone()
     {
         return TimeZone::convert(parent::getTimezone());
+    }
+
+    public function getOffset()
+    {
+        return $this->getTimezone()->getOffset($this);
+    }
+
+    public static function compare(DateTime $a, DateTime $b)
+    {
+        $obj1 = $a->clone;
+        $obj2 = $b->clone->setTimezone($obj1->getTimezone());
+
+        $cmp = $obj1->format('U') - $obj2->format('U');
+
+        if ($cmp === 0) {
+            return 0;
+        }
+
+        return $cmp < 0 ? -1 : 1;
     }
 }

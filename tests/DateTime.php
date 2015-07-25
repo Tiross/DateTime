@@ -616,6 +616,23 @@ class DateTime extends \atoum
         ;
     }
 
+    /** @dataProvider timezoneProvider */
+    public function testGetOffset($timezone)
+    {
+        $this
+            ->if($this->newTestedInstance(null, $timezone))
+            ->then
+                ->assert('Test with ' . $timezone)
+                    ->object($this->testedInstance->getOffset())
+                        ->isInstanceOf('\Tiross\DateTime\Duration')
+                        ->isEqualTo($this->testedInstance->getTimezone()->getOffset($this->testedInstance))
+
+                    ->object($this->testedInstance->getOffset())
+                        ->isEqualTo($this->testedInstance->getOffset)
+                        ->isEqualTo($this->testedInstance->GETOFFSET)
+        ;
+    }
+
     public function timezoneProvider()
     {
         return array(
@@ -633,6 +650,55 @@ class DateTime extends \atoum
             'Europe/Paris',
             'Europe/Prague',
             'Europe/Rome',
+        );
+    }
+
+    /** @dataProvider iso8601Provider */
+    public function testIso8601($string)
+    {
+        $this
+            ->if($this->newTestedInstance($string))
+            ->then
+                ->string($this->testedInstance->iso8601())
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->iso8601)
+                    ->isIdenticalTo($string)
+
+                ->string($this->testedInstance->ISO8601)
+                    ->isIdenticalTo($string)
+        ;
+    }
+
+    public function iso8601Provider()
+    {
+        return array(
+            '2015-01-01T00:00:12Z',
+            '2003-01-22T23:43:12Z',
+            '2032-10-29T12:37:16+01:00',
+            '2022-10-29T12:37:16-09:30',
+        );
+    }
+
+    /** @dataProvider compareProvider */
+    public function testCompare($a, $b, $aIsMinimum, $bothEquals)
+    {
+        $this
+            ->if($result = $bothEquals ? 0 : ($aIsMinimum ? -1 : 1))
+            ->then
+                ->integer(testedClass::compare(new testedClass($a), new testedClass($b)))
+                    ->isIdenticalTo($result)
+        ;
+    }
+
+    public function compareProvider()
+    {
+        // $a, $b, $aIsMinimum, $bothEquals
+        return array(
+            array('2015-01-01T00:00:12Z', '2015-01-01T00:00:12Z', false, true),
+            array('2015-01-01T00:00:11Z', '2015-01-01T00:00:12Z', true, false),
+            array('2015-01-01T00:00:13Z', '2015-01-01T00:00:12Z', false, false),
+            array('2015-01-01T00:00:12Z', '2015-01-01T01:00:12+01:00', false, true),
         );
     }
 }

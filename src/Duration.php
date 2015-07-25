@@ -11,6 +11,38 @@ namespace Tiross\DateTime;
  * Duration
  *
  * @author Tiross
+ *
+ * @method self clone() Return a clone of current instance
+ * @method integer years() Return years (act like `$obj->inUnits('years');`)
+ * @method integer months() Return months (act like `$obj->inUnits('months');`)
+ * @method integer weeks() Return weeks (act like `$obj->inUnits('weeks');`)
+ * @method integer days() Return days (act like `$obj->inUnits('days');`)
+ * @method integer hours() Return hours (act like `$obj->inUnits('hours');`)
+ * @method integer minutes() Return minutes (act like `$obj->inUnits('minutes');`)
+ * @method integer seconds() Return seconds (act like `$obj->inUnits('seconds');`)
+ * @method self sub() Alias for `Duration::subtract()`
+ * @method string toString() Return a string representation of current duration
+ *
+ * @property self clone Return a clone of current instance
+ * @property integer years Return years (act like `$obj->inUnits('years');`)
+ * @property integer months Return months (act like `$obj->inUnits('months');`)
+ * @property integer weeks Return weeks (act like `$obj->inUnits('weeks');`)
+ * @property integer days Return days (act like `$obj->inUnits('days');`)
+ * @property integer hours Return hours (act like `$obj->inUnits('hours');`)
+ * @property integer minutes Return minutes (act like `$obj->inUnits('minutes');`)
+ * @property integer seconds Return seconds (act like `$obj->inUnits('seconds');`)
+ * @property boolean hasPositive Alias for method `Duration::hasPositive()`
+ * @property boolean hasNegative Alias for method `Duration::hasNegative()`
+ * @property boolean isZero Alias for method `Duration::isZero()`
+ * @property boolean isPositive Alias for method `Duration::isPositive()`
+ * @property boolean isNegative Alias for method `Duration::isNegative()`
+ * @property boolean isFinite Alias for method `Duration::isFinite()`
+ * @property boolean isInfinite Alias for method `Duration::isInfinite()`
+ * @property self inverse Alias for method `Duration::inverse()`
+ * @property self absolute Alias for method `Duration::absolute()`
+ * @property self linearize Alias for method `Duration::linearize()`
+ * @property self getCalendarDuration Alias for method `Duration::getCalendarDuration()`
+ * @property self getClockDuration Alias for method `Duration::getClockDuration()`
  */
 class Duration
 {
@@ -271,6 +303,7 @@ class Duration
 
             case 'inverse':
             case 'absolute':
+            case 'linearize':
             case 'getcalendarduration':
             case 'getclockduration':
                 return $this->$property();
@@ -510,10 +543,10 @@ class Duration
     {
         $factor = (float) $factor;
 
-        $this->months  = intval($this->months * $factor);
-        $this->days    = intval($this->days * $factor);
-        $this->minutes = intval($this->minutes * $factor);
-        $this->seconds = intval($this->seconds * $factor);
+        $this->months  = (float) $this->months * $factor;
+        $this->days    = (float) $this->days * $factor;
+        $this->minutes = (float) $this->minutes * $factor;
+        $this->seconds = (float) $this->seconds * $factor;
 
         return $this;
     }
@@ -649,6 +682,26 @@ class Duration
         return $this->subtractDuration(new static($args));
     }
 
+    /**
+     * Return the same duration but with units recalculated
+     *
+     * You may think (and you may want that) that 1 hour is 3600 seconds, but some times it's not true.
+     *
+     * @return self
+     */
+    public function linearize()
+    {
+        $date = $this->getReferenceDate();
+
+        if (!$date instanceof DateTime) {
+            $date = new DateTime;
+        }
+
+        $a = $date->clone;
+        $b = $date->clone->add($this);
+
+        return $a->diff($b);
+    }
 
     /**
      * Returns a new object with the same calendar delta (months and days only) as the current object.
@@ -773,5 +826,14 @@ class Duration
         }
 
         return $intervals;
+    }
+
+    public function __debugInfo()
+    {
+        return array(
+            'isFinite'  => $this->isFinite(),
+            'duration'  => (string) $this,
+            'reference' => $this->getReferenceDate(),
+        );
     }
 }

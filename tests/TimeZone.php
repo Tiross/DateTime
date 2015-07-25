@@ -193,12 +193,45 @@ class TimeZone extends \atoum
     public function offsetProvider()
     {
         return array(
-            '+03:00',
-            '-01:00',
-            '-02:00',
             sprintf('%+03d:00', rand(-10, 10)),
-            '+0300',
-            '-0100',
+            'Z',
+            'Zulu',
+            '-11:00',
+            '-10:00',
+            '-09:30',
+            '-09:00',
+            '-08:00',
+            '-07:00',
+            '-06:00',
+            '-05:00',
+            '-04:30',
+            '-04:00',
+            '-03:00',
+            '-02:00',
+            '-01:00',
+            '-00:00',
+            '+00:00',
+            '+01:00',
+            '+02:00',
+            '+03:00',
+            '+04:00',
+            '+04:30',
+            '+05:00',
+            '+05:30',
+            '+05:45',
+            '+06:00',
+            '+06:30',
+            '+07:00',
+            '+08:00',
+            '+08:45',
+            '+09:00',
+            '+09:30',
+            '+10:00',
+            '+11:00',
+            '+11:30',
+            '+12:00',
+            '+13:00',
+            '+14:00',
         );
     }
 
@@ -220,7 +253,7 @@ class TimeZone extends \atoum
     public function testGetOffset($timezone)
     {
         $this
-            ->if($this->newTestedInstance($timezone))
+            ->if($obj = $this->newTestedInstance($timezone))
             ->and($date = new DateTime)
             ->then
                 ->object($offset = $this->testedInstance->getOffset($date))
@@ -232,8 +265,8 @@ class TimeZone extends \atoum
                 ->integer($offset->seconds())
                     ->isIdenticalTo(timezone_offset_get(new \DateTimeZone($timezone), new \DateTime))
 
-                ->exception(function () {
-                    $this->testedInstance->getOffset(uniqid());
+                ->exception(function () use ($obj) {
+                    $obj->getOffset(uniqid());
                 })
                     ->isInstanceOf('\Tiross\DateTime\Exception\InvalidDateTimeException')
                     ->hasCode(203)

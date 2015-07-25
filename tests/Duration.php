@@ -379,7 +379,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testYears($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testYears($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -410,7 +410,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testMonths($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testMonths($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -441,7 +441,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testWeeks($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testWeeks($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -472,7 +472,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testDays($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testDays($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -503,7 +503,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testHours($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testHours($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -534,7 +534,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testMinutes($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testMinutes($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -565,7 +565,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testSeconds($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testSeconds($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($args = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -594,15 +594,72 @@ class Duration extends \atoum
 
     public function unitsProvider()
     {
-        // $years, $months, $weeks, $days, $hours, $minutes, $seconds
+        // $years, $months, $weeks, $days, $hours, $minutes, $seconds, $string
+
+        $createValue = function ($y, $m, $w, $d, $h, $i, $s) {
+
+            $isNegative = false;
+
+            $years   = floor(($y * 12 + $m) / 12);
+            $months  = ($y * 12 + $m) % 12;
+            $weeks   = floor(($w * 7 + $d) / 7);
+            $days    = ($w * 7 + $d) % 7;
+            $hours   = floor(($h * 60 + $i) / 60);
+            $minutes = ($h * 60 + $i) % 60;@
+            $seconds = $s;
+
+            $date = 'P';
+            if ($years) {
+                $date .= abs($years) . 'Y';
+                $isNegative = $years < 0;
+            }
+            if ($months) {
+                $date .= abs($months) . 'M';
+            }
+            if ($weeks) {
+                $date .= abs($weeks) . 'W';
+            }
+            if ($days) {
+                $date .= abs($days) . 'D';
+            }
+
+            $time = 'T';
+            if ($hours) {
+                $time .= abs($hours) . 'H';
+            }
+            if ($minutes) {
+                $time .= abs($minutes) . 'M';
+            }
+            if ($seconds) {
+                $time .= abs($seconds) . 'S';
+            }
+
+            if ($date === 'P' && $time === 'T') {
+                $string = 'P0D';
+            } else {
+                $string = ($isNegative ? '-' : '') . $date . ($time != 'T' ? $time : '');
+            }
+
+            return array(
+                $years,
+                $months,
+                $weeks,
+                $days,
+                $hours,
+                $minutes,
+                $seconds,
+                $string,
+            );
+        };
+
         return array(
-            array(5, 2, 0, -10, 1, 3, -5),
-            array(0, 0, 0, 0, 0, 0, 3600),
-            array(1, 0, 0, 0, 0, 0, 0),
-            array(0, 0, 0, 0, 0, 0, 0),
-            array(0, 0, 1, 0, 0, 0, 0),
-            array(-1, -1, -1, -1, -1, -1, -1),
-            array(rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100)),
+            $createValue(5, 2, 0, -10, 1, 3, -5),
+            $createValue(0, 0, 0, 0, 0, 0, 3600),
+            $createValue(1, 0, 0, 0, 0, 0, 0),
+            $createValue(0, 0, 0, 0, 0, 0, 0),
+            $createValue(0, 0, 1, 0, 0, 0, 0),
+            $createValue(-1, -1, -1, -1, -1, -1, -1),
+            $createValue(rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100), rand(0, 100)),
         );
     }
 
@@ -809,7 +866,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testGetCalendarDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testGetCalendarDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($date = array(
@@ -840,7 +897,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testGetClockDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testGetClockDuration($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($date = array(
@@ -871,48 +928,11 @@ class Duration extends \atoum
     /**
     * @dataProvider unitsProvider
     */
-    public function testCastToString($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testCastToString($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
             ->if($obj = $this->newTestedInstance($params))
-
-            ->and($string = '')
-            ->when(function () use (&$string, $obj) {
-                if ($obj->isZero()) {
-                    $string = 'P0D';
-                } else {
-                    $values = $obj->inUnits('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds');
-
-                    $date = 'P';
-                    if ($values['years']) {
-                        $date .= abs($values['years']) . 'Y';
-                    }
-                    if ($values['months']) {
-                        $date .= abs($values['months']) . 'M';
-                    }
-                    if ($values['weeks']) {
-                        $date .= abs($values['weeks']) . 'W';
-                    }
-                    if ($values['days']) {
-                        $date .= abs($values['days']) . 'D';
-                    }
-
-                    $time = 'T';
-                    if ($values['hours']) {
-                        $time .= abs($values['hours']) . 'H';
-                    }
-                    if ($values['minutes']) {
-                        $time .= abs($values['minutes']) . 'M';
-                    }
-                    if ($values['seconds']) {
-                        $time .= abs($values['seconds']) . 'S';
-                    }
-
-                    $string = ($obj->isNegative() ? '-' : '') . $date . ($time != 'T' ? $time : '');
-                }
-            })
-
             ->then
                 ->castToString($this->newTestedInstance($params))
                     ->isIdenticalTo($string)
@@ -979,7 +999,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testIsFinite($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testIsFinite($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -994,7 +1014,7 @@ class Duration extends \atoum
     /**
      * @dataProvider unitsProvider
      */
-    public function testIsInfinite($years, $months, $weeks, $days, $hours, $minutes, $seconds)
+    public function testIsInfinite($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
     {
         $this
             ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
@@ -1003,6 +1023,76 @@ class Duration extends \atoum
                 ->boolean($this->testedInstance->isInfinite())->isFalse
                 ->boolean($this->testedInstance->isInfinite)->isFalse
                 ->boolean($this->testedInstance->ISINFINITE)->isFalse
+        ;
+    }
+
+    public function testLinearize()
+    {
+        $this
+            ->assert('Tiross\DataTime\Duration::linearize()')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($obj = $this->testedInstance->linearize())
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
+
+                    ->castToString($obj)
+                        ->isIdenticalTo('PT1H')
+
+            ->assert('Tiross\DataTime\Duration::$linearize')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($obj = $this->testedInstance->linearize)
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
+
+                    ->castToString($obj)
+                        ->isIdenticalTo('PT1H')
+
+            ->assert('Tiross\DataTime\Duration::$LiNeArIzE')
+                ->if($this->newTestedInstance(array('seconds' => 3600)))
+                ->and($this->testedInstance->setReferenceDate(DateTime::now()))
+                ->then
+                    ->castToString($this->testedInstance)
+                        ->isIdenticalTo('PT3600S')
+
+                    ->object($obj = $this->testedInstance->LiNeArIzE)
+                        ->isInstanceOfTestedClass
+                        ->isNotTestedInstance
+
+                    ->castToString($obj)
+                        ->isIdenticalTo('PT1H')
+        ;
+    }
+
+    /**
+     * @dataProvider unitsProvider
+    */
+    public function test__debugInfo($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
+    {
+        $this
+            ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($date = null)
+            ->and($results = array('isFinite' => true, 'duration' => $string, 'reference' => &$date))
+
+            ->if($this->newTestedInstance($params))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->isIdenticalTo($results)
+
+            ->if($date = new DateTime)
+            ->and($this->newTestedInstance($params, $date))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->isIdenticalTo($results)
         ;
     }
 }

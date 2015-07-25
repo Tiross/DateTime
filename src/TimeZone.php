@@ -175,53 +175,57 @@ class TimeZone extends \DateTimeZone
     protected function nameFromOffset($offset)
     {
         $names = array(
-            2400 => 'UTC',
-            2500 => 'Africa/Lagos',
-            2600 => 'Africa/Cairo',
-            2700 => 'Antarctica/Syowa',
-            2800 => 'Asia/Dubai',
-            2830 => 'Asia/Kabul',
-            2900 => 'Antarctica/Mawson',
-            2930 => 'Asia/Colombo',
-            2945 => 'Asia/Kathmandu',
-            3000 => 'Antarctica/Vostok',
-            3030 => 'Asia/Rangoon',
-            3100 => 'Indian/Christmas',
-            3200 => 'Asia/Singapore',
-            3245 => 'Australia/Eucla',
-            3300 => 'Asia/Seoul',
-            3330 => 'Australia/Darwin',
-            3400 => 'Pacific/Chuuk',
-            3500 => 'Pacific/Noumea',
-            3530 => 'Pacific/Norfolk',
-            3600 => 'Pacific/Wake',
-            3700 => 'Pacific/Tongatapu',
-            3800 => 'Pacific/Kiritimati',
-            2300 => 'Atlantic/Cape_Verde',
-            2200 => 'America/Noronha',
-            2100 => 'America/Cayenne',
-            2000 => 'America/Curacao',
-            2030 => 'America/Caracas',
-            1900 => 'America/Panama',
-            1800 => 'Pacific/Galapagos',
-            1700 => 'America/Phoenix',
-            1600 => 'Pacific/Pitcairn',
-            1500 => 'Pacific/Gambier',
-            1530 => 'Pacific/Marquesas',
-            1400 => 'Pacific/Honolulu',
-            1300 => 'Pacific/Midway',
+                0 => 'UTC',
+              100 => 'Africa/Lagos',
+              200 => 'Africa/Cairo',
+              300 => 'Antarctica/Syowa',
+              400 => 'Asia/Dubai',
+              430 => 'Asia/Kabul',
+              500 => 'Antarctica/Mawson',
+              530 => 'Asia/Colombo',
+              545 => 'Asia/Kathmandu',
+              600 => 'Antarctica/Vostok',
+              630 => 'Asia/Rangoon',
+              700 => 'Indian/Christmas',
+              800 => 'Asia/Singapore',
+              845 => 'Australia/Eucla',
+              900 => 'Asia/Seoul',
+              930 => 'Australia/Darwin',
+             1000 => 'Pacific/Chuuk',
+             1100 => 'Pacific/Noumea',
+             1130 => 'Pacific/Norfolk',
+             1200 => 'Pacific/Wake',
+             1300 => 'Pacific/Tongatapu',
+             1400 => 'Pacific/Kiritimati',
+             -100 => 'Atlantic/Cape_Verde',
+             -200 => 'America/Noronha',
+             -300 => 'America/Cayenne',
+             -400 => 'America/Curacao',
+             -430 => 'America/Caracas',
+             -500 => 'America/Panama',
+             -600 => 'Pacific/Galapagos',
+             -700 => 'America/Phoenix',
+             -800 => 'Pacific/Pitcairn',
+             -900 => 'Pacific/Gambier',
+             -930 => 'Pacific/Marquesas',
+            -1000 => 'Pacific/Honolulu',
+            -1100 => 'Pacific/Midway',
         );
 
-        $o = str_replace(':', '', $offset);
+        $tmp = str_replace(':', '', $offset);
 
-        if (!is_numeric($o)) {
+        if (in_array(strtolower($tmp), array('z', 'zulu'))) {
+            $tmp = 0;
+        }
+
+        if (!is_numeric($tmp)) {
             return null;
         }
 
-        $o += 2400;
+        $tmp = (int) $tmp;
 
-        if (array_key_exists($o, $names)) {
-            return $names[ $o ];
+        if (array_key_exists($tmp, $names)) {
+            return $names[ $tmp ];
         }
 
         return false;
