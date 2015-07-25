@@ -117,6 +117,19 @@ class TimeZone extends \atoum
         ;
     }
 
+    /**
+     * @dataProvider timezoneProvider
+     */
+    public function test__debugInfo($tz)
+    {
+        $this
+            ->array($this->newTestedInstance($tz)->__debugInfo())
+                ->hasSize(1)
+                ->hasKey('name')
+                    ->strictlyContains($tz)
+        ;
+    }
+
     public function testVersion()
     {
         $this
