@@ -113,6 +113,15 @@ class DateTime extends \DateTime
         throw new Exception\LogicException($message, 198);
     }
 
+    public function __debugInfo()
+    {
+        return array(
+            'date'     => $this->ymd(),
+            'time'     => $this->hms(),
+            'timezone' => $this->getTimezone(),
+        );
+    }
+
     /**
      * Returns or modifies current year
      *
@@ -317,17 +326,17 @@ class DateTime extends \DateTime
         switch (strtolower($what)) {
             case 'year':
             case 'years':
-                $month  = 0;
+                $month = 0;
                 // no break
 
             case 'month':
             case 'months':
-                $day    = 0;
+                $day = 0;
                 // no break
 
             case 'day':
             case 'days':
-                $hour   = 0;
+                $hour = 0;
                 // no break
 
             case 'hour':
@@ -423,5 +432,19 @@ class DateTime extends \DateTime
     public function getOffset()
     {
         return $this->getTimezone()->getOffset($this);
+    }
+
+    public static function compare(DateTime $a, DateTime $b)
+    {
+        $obj1 = $a->clone;
+        $obj2 = $b->clone->setTimezone($obj1->getTimezone());
+
+        $cmp = $obj1->format('U') - $obj2->format('U');
+
+        if ($cmp === 0) {
+            return 0;
+        }
+
+        return $cmp < 0 ? -1 : 1;
     }
 }

@@ -73,6 +73,13 @@ class TimeZone extends \DateTimeZone
         return $this->getName();
     }
 
+    public function __debugInfo()
+    {
+        return array(
+            'name' => (string) $this,
+        );
+    }
+
     /**
      * Return a clone of this object
      * @return self

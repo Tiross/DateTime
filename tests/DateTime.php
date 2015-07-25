@@ -6,6 +6,7 @@ use Tiross\DateTime\DateTime as testedClass;
 use Tiross\DateTime\TimeZone;
 use Tiross\DateTime\Duration;
 use DateInterval;
+use DateTimeZone;
 
 class DateTime extends \atoum
 {
@@ -603,8 +604,25 @@ class DateTime extends \atoum
     public function testGetTimezone($timezone)
     {
         $this
-            ->assert('With ' . $timezone)
+            ->given($dtz = new DateTimeZone($timezone))
+            ->and($tz = new TimeZone($timezone))
+
+            ->assert('With ' . $timezone . ' as string')
                 ->if($this->newTestedInstance(null, $timezone))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo($tz)
+
+            ->assert('With ' . $timezone . ' as DateTimeZone')
+                ->if($this->newTestedInstance(null, $dtz))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo($tz)
+
+            ->assert('With ' . $timezone . ' as TimeZone')
+                ->if($this->newTestedInstance(null, $tz))
                 ->then
                     ->object($this->testedInstance->getTimezone())
                         ->isInstanceOf('\Tiross\DateTime\TimeZone')
@@ -678,5 +696,44 @@ class DateTime extends \atoum
             '2032-10-29T12:37:16+01:00',
             '2022-10-29T12:37:16-09:30',
         );
+    }
+
+    /** @dataProvider compareProvider */
+    public function testCompare($a, $b, $aIsMinimum, $bothEquals)
+    {
+        $this
+            ->if($result = $bothEquals ? 0 : ($aIsMinimum ? -1 : 1))
+            ->then
+                ->integer(testedClass::compare(new testedClass($a), new testedClass($b)))
+                    ->isIdenticalTo($result)
+        ;
+    }
+
+    public function compareProvider()
+    {
+        // $a, $b, $aIsMinimum, $bothEquals
+        return array(
+            array('2015-01-01T00:00:12Z', '2015-01-01T00:00:12Z', false, true),
+            array('2015-01-01T00:00:11Z', '2015-01-01T00:00:12Z', true, false),
+            array('2015-01-01T00:00:13Z', '2015-01-01T00:00:12Z', false, false),
+            array('2015-01-01T00:00:12Z', '2015-01-01T01:00:12+01:00', false, true),
+        );
+    }
+
+    public function test__debugInfo()
+    {
+        $this
+            ->given($date = sprintf('%d-%02d-%02d', rand(1900, 2200), rand(1, 12), rand(1, 28)))
+            ->and($time = sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 60), rand(0, 60)))
+            ->and($tz = new TimeZone('UTC'))
+
+            ->if($this->newTestedInstance($date . 'T' . $time, $tz))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->hasSize(3)
+                    ->strictlyContains($date)
+                    ->strictlyContains($time)
+                    ->contains($tz)
+        ;
     }
 }
