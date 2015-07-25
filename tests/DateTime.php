@@ -6,6 +6,7 @@ use Tiross\DateTime\DateTime as testedClass;
 use Tiross\DateTime\TimeZone;
 use Tiross\DateTime\Duration;
 use DateInterval;
+use DateTimeZone;
 
 class DateTime extends \atoum
 {
@@ -603,8 +604,25 @@ class DateTime extends \atoum
     public function testGetTimezone($timezone)
     {
         $this
-            ->assert('With ' . $timezone)
+            ->given($dtz = new DateTimeZone($timezone))
+            ->and($tz = new TimeZone($timezone))
+
+            ->assert('With ' . $timezone . ' as string')
                 ->if($this->newTestedInstance(null, $timezone))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo($tz)
+
+            ->assert('With ' . $timezone . ' as DateTimeZone')
+                ->if($this->newTestedInstance(null, $dtz))
+                ->then
+                    ->object($this->testedInstance->getTimezone())
+                        ->isInstanceOf('\Tiross\DateTime\TimeZone')
+                        ->isEqualTo($tz)
+
+            ->assert('With ' . $timezone . ' as TimeZone')
+                ->if($this->newTestedInstance(null, $tz))
                 ->then
                     ->object($this->testedInstance->getTimezone())
                         ->isInstanceOf('\Tiross\DateTime\TimeZone')
