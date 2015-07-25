@@ -719,4 +719,21 @@ class DateTime extends \atoum
             array('2015-01-01T00:00:12Z', '2015-01-01T01:00:12+01:00', false, true),
         );
     }
+
+    public function test__debugInfo()
+    {
+        $this
+            ->given($date = sprintf('%d-%02d-%02d', rand(1900, 2200), rand(1, 12), rand(1, 28)))
+            ->and($time = sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 60), rand(0, 60)))
+            ->and($tz = new TimeZone('UTC'))
+
+            ->if($this->newTestedInstance($date . 'T' . $time, $tz))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->hasSize(3)
+                    ->strictlyContains($date)
+                    ->strictlyContains($time)
+                    ->contains($tz)
+        ;
+    }
 }
