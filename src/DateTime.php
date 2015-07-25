@@ -113,6 +113,15 @@ class DateTime extends \DateTime
         throw new Exception\LogicException($message, 198);
     }
 
+    public function __debugInfo()
+    {
+        return array(
+            'date'     => $this->ymd(),
+            'time'     => $this->hms(),
+            'timezone' => $this->getTimezone(),
+        );
+    }
+
     /**
      * Returns or modifies current year
      *
