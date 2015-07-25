@@ -827,4 +827,13 @@ class Duration
 
         return $intervals;
     }
+
+    public function __debugInfo()
+    {
+        return array(
+            'isFinite'  => $this->isFinite(),
+            'duration'  => (string) $this,
+            'reference' => $this->getReferenceDate(),
+        );
+    }
 }
