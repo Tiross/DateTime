@@ -715,7 +715,7 @@ class DateTime extends \atoum
                     ->hasSize(3)
                     ->strictlyContains($date)
                     ->strictlyContains($time)
-                    ->strictlyContains($tz)
+                    ->contains($tz)
         ;
     }
 }
