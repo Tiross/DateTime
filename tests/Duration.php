@@ -1072,4 +1072,27 @@ class Duration extends \atoum
                         ->isIdenticalTo('PT1H')
         ;
     }
+
+    /**
+     * @dataProvider unitsProvider
+    */
+    public function test__debugInfo($years, $months, $weeks, $days, $hours, $minutes, $seconds, $string)
+    {
+        $this
+            ->given($params = compact('years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'))
+            ->and($date = null)
+            ->and($results = array('isFinite' => true, 'duration' => $string, 'reference' => &$date))
+
+            ->if($this->newTestedInstance($params))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->isIdenticalTo($results)
+
+            ->if($date = new DateTime)
+            ->and($this->newTestedInstance($params, $date))
+            ->then
+                ->array($this->testedInstance->__debugInfo())
+                    ->isIdenticalTo($results)
+        ;
+    }
 }
