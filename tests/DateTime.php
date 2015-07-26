@@ -29,7 +29,7 @@ class DateTime extends \atoum
             ->given($year = rand(2000, 2020))
             ->and($month = rand(1, 12))
             ->and($day = rand(1, 28)) // avoid rand to make a date like 31/02
-            ->and($hour = rand(0, 24))
+            ->and($hour = rand(0, 23))
             ->and($minute = rand(0, 59))
             ->and($second = rand(0, 59))
             ->and($zoneParis = 'Europe/Paris')
@@ -81,7 +81,7 @@ class DateTime extends \atoum
             ->given($year = rand(2000, 2020))
             ->and($month = rand(1, 12))
             ->and($day = rand(1, 28)) // avoid rand to make a date like 31/02
-            ->and($hour = rand(0, 24))
+            ->and($hour = rand(0, 23))
             ->and($minute = rand(0, 59))
             ->and($second = rand(0, 59))
             ->and($zoneParis = 'Europe/Paris')
@@ -108,7 +108,7 @@ class DateTime extends \atoum
             ->given($year = rand(2000, 2020))
             ->and($month = rand(1, 12))
             ->and($day = rand(1, 28)) // avoid rand to make a date like 31/02
-            ->and($hour = rand(0, 24))
+            ->and($hour = rand(0, 23))
             ->and($minute = rand(0, 59))
             ->and($second = rand(0, 59))
 
@@ -724,7 +724,7 @@ class DateTime extends \atoum
     {
         $this
             ->given($date = sprintf('%d-%02d-%02d', rand(1900, 2200), rand(1, 12), rand(1, 28)))
-            ->and($time = sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 60), rand(0, 60)))
+            ->and($time = sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 59), rand(0, 59)))
             ->and($tz = new TimeZone('UTC'))
 
             ->if($this->newTestedInstance($date . 'T' . $time, $tz))
